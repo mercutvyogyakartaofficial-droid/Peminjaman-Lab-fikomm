@@ -1393,17 +1393,17 @@
                         <div class="px-4 pb-4 pt-3 border-t border-slate-100 dark:border-slate-700/60 flex items-stretch gap-2">
                             <button onclick="openJadwalModal('${item.ID_Alat}')" class="min-h-[42px] px-3 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 font-bold text-xs flex items-center justify-center gap-1.5 shrink-0 transition-colors" title="Lihat Jadwal Peminjaman">
                                 <i class="fas fa-calendar-alt text-blue-600 dark:text-blue-400 shrink-0"></i>
-                                <span class="text-blue-600 dark:text-blue-400">Jadwal</span>
+                                <span class="text-blue-600 dark:text-blue-400 whitespace-normal leading-tight text-center">Jadwal</span>
                             </button>
                             ${isRusak ? `
-                                <button disabled class="min-h-[42px] flex-1 px-3 py-2 rounded-xl font-bold text-xs text-gray-400 bg-gray-100 dark:bg-slate-700/50 flex items-center justify-center gap-2 cursor-not-allowed leading-tight text-center">
+                                <button disabled class="min-h-[42px] flex-1 px-3 py-2 rounded-xl font-bold text-xs text-gray-400 bg-gray-100 dark:bg-slate-700/50 flex items-center justify-center gap-1.5 cursor-not-allowed">
                                     <i class="fas fa-ban shrink-0 text-xs"></i>
-                                    <span class="leading-tight text-center">Tidak<br>Tersedia</span>
+                                    <span class="whitespace-normal break-words leading-tight text-center">Tidak Tersedia</span>
                                 </button>
                             ` : `
-                                <button onclick="addToCart('${item.ID_Alat}')" class="min-h-[42px] flex-1 px-3 py-2 rounded-xl font-bold text-xs text-white ${stok > 0 && !isFakultas ? 'bg-blue-600 hover:bg-blue-700' : 'bg-amber-500 hover:bg-amber-600'} transition-colors flex items-center justify-center gap-2 shadow-sm leading-tight text-center">
-                                    <i class="fas fa-clipboard-list shrink-0 text-sm"></i>
-                                    <span class="leading-tight text-center">${stok > 0 && !isFakultas ? 'Tambah<br>Pinjam' : 'Booking<br>Tgl Lain'}</span>
+                                <button onclick="addToCart('${item.ID_Alat}')" class="min-h-[42px] flex-1 px-3 py-2 rounded-xl font-bold text-xs text-white ${stok > 0 && !isFakultas ? 'bg-blue-600 hover:bg-blue-700' : 'bg-amber-500 hover:bg-amber-600'} transition-colors flex items-center justify-center gap-1.5 shadow-sm">
+                                    <i class="fas fa-clipboard-list shrink-0 text-xs sm:text-sm"></i>
+                                    <span class="whitespace-normal break-words leading-tight text-center">${stok > 0 && !isFakultas ? 'Tambah Pinjam' : 'Booking Tgl Lain'}</span>
                                 </button>
                             `}
                         </div>
