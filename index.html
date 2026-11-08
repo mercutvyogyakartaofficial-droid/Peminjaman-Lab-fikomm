@@ -138,7 +138,7 @@
     <aside id="mainSidebar" class="fixed md:static inset-y-0 left-0 z-50 w-64 bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 flex flex-col h-full overflow-y-auto -translate-x-full md:translate-x-0 shrink-0 transition-transform duration-300 ease-in-out shadow-2xl md:shadow-none">
         <div class="p-5 flex justify-between items-center border-b border-gray-100 dark:border-slate-700">
             <div class="flex items-center gap-3">
-                <img src="https://drive.google.com/thumbnail?id=1Mw6VO6mLpKZazBygIdziq10mgIKbxH7j&sz=w800" alt="Logo Fikomm" class="w-10 h-10 rounded-full object-cover bg-white dark:bg-slate-800 p-0.5 border border-gray-200 dark:border-slate-600">
+                <img src="https://drive.google.com/thumbnail?id=1Mw6VO6mLpKZazBygIdziq10mgIKbxH7j&sz=w512" alt="Logo Fikomm" class="w-10 h-10 rounded-full object-cover bg-white dark:bg-slate-800 p-0.5 border border-gray-200 dark:border-slate-600" onerror="this.src='https://placehold.co/100x100/1d4ed8/ffffff?text=FIKOMM'">
                 <h1 class="text-xl font-bold text-blue-700 dark:text-blue-400 leading-tight">Lab<br>Fikomm</h1>
             </div>
             <div class="flex items-center gap-1">
@@ -159,14 +159,17 @@
                     <i class="fas fa-th-large w-5 text-center"></i> Semua Katalog
                 </a>
                 <a href="#" onclick="switchMenu('alat')" id="menu-alat" class="menu-item flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-slate-700/50 transition-colors mt-1">
-                    <i class="fas fa-video w-5 text-center"></i> Peminjaman Alat
+                    <i class="fas fa-video w-5 text-center"></i> Alat Laboratorium
                 </a>
                 <a href="#" onclick="switchMenu('ruangan')" id="menu-ruangan" class="menu-item flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-slate-700/50 transition-colors mt-1">
-                    <i class="fas fa-door-open w-5 text-center"></i> Peminjaman Ruangan
+                    <i class="fas fa-door-open w-5 text-center"></i> Ruangan & Studio
                 </a>
                 <a href="#" onclick="openCartModal()" id="menu-keranjang" class="menu-item flex items-center justify-between px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-slate-700/50 transition-colors mt-1">
                     <span class="flex items-center gap-3"><i class="fas fa-clipboard-list w-5 text-center"></i> Keranjang Peminjaman</span>
                     <span id="sidebarCartBadge" class="hidden bg-red-500 text-white text-[10px] font-bold w-5 h-5 rounded-full items-center justify-center shadow">0</span>
+                </a>
+                <a href="#" onclick="openGlobalScheduleModal()" id="menu-jadwal-global" class="menu-item flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-slate-700/50 transition-colors mt-1">
+                    <i class="fas fa-calendar-alt w-5 text-center text-blue-600 dark:text-blue-400"></i> Cek Jadwal Penggunaan
                 </a>
                 <a href="https://api.whatsapp.com/send/?phone=6285158173155&text=Halo%20Admin%20Lab%20Fikomm,%20saya%20ingin%20konfirmasi%20peminjaman.&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" onclick="closeMobileSidebar()" id="menu-hotline" class="flex items-center justify-between px-4 py-2.5 text-sm font-medium rounded-lg text-green-600 hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-900/20 transition-colors mt-1">
                     <span class="flex items-center gap-3"><i class="fab fa-whatsapp w-5 text-center text-base"></i> Hotline Lab Fikomm</span>
@@ -200,10 +203,10 @@
 
         <div class="p-4 border-t border-gray-100 dark:border-slate-700">
             <button onclick="openLoginModal()" id="btn-login-petugas" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 dark:text-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 rounded-lg transition-colors">
-                <i class="fas fa-sign-in-alt"></i> Login Petugas
+                <i class="fas fa-sign-in-alt"></i> Panel Petugas
             </button>
             <button onclick="logoutPetugas()" id="btn-logout-petugas" class="hidden w-full flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/40 rounded-lg transition-colors">
-                <i class="fas fa-sign-out-alt"></i> Keluar
+                <i class="fas fa-sign-out-alt"></i> Keluar Mode Petugas
             </button>
         </div>
     </aside>
@@ -218,10 +221,14 @@
                 <h2 class="text-lg font-bold text-gray-800 dark:text-white" id="mainTitle">Katalog Inventaris</h2>
             </div>
             
-            <div class="flex items-center gap-4">
-                <div class="hidden sm:flex items-center text-xs font-semibold text-gray-500 dark:text-gray-400 mr-2" id="syncStatus">
-                    <i class="fas fa-cloud-check text-green-500 mr-1"></i> Data Tersinkronisasi
+            <div class="flex items-center gap-2 sm:gap-3">
+                <div class="hidden sm:flex items-center text-xs font-semibold text-gray-500 dark:text-gray-400 px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-slate-700/50 border border-gray-200 dark:border-slate-600" id="syncStatus">
+                    <i class="fas fa-check-circle text-green-500 mr-1.5"></i> Data Tersinkronisasi
                 </div>
+                <button onclick="syncWithCloud(true)" class="flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-white hover:bg-blue-600 dark:hover:bg-blue-600 dark:hover:text-white px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 transition-all shadow-2xs" title="Tarik & Sinkronkan Data Terbaru dari Google Sheet">
+                    <i class="fas fa-sync-alt" id="headerSyncBtnIcon"></i>
+                    <span class="hidden md:inline">Sinkronkan Sekarang</span>
+                </button>
                 <button onclick="openCartModal()" class="relative p-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" title="Keranjang Peminjaman">
                     <i class="fas fa-clipboard-list text-xl"></i>
                     <span id="cartBadge" class="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center -mt-1 -mr-1 shadow">0</span>
@@ -230,18 +237,21 @@
         </header>
 
         <div id="mainScrollContainer" class="flex-1 md:overflow-y-auto p-4 md:p-8 bg-slate-50 dark:bg-slate-900 transition-colors duration-200 relative">
-            <div class="flex flex-col md:flex-row gap-4 mb-8">
+            <div class="flex flex-col md:flex-row gap-4 mb-4">
                 <div class="relative flex-1">
-                    <input type="text" id="searchInput" placeholder="Cari nama, ID, atau kategori..." 
+                    <input type="text" id="searchInput" placeholder="Cari nama alat, ruangan, ID, atau spesifikasi..." 
                         class="w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-sm rounded-xl pl-12 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white transition-all shadow-sm">
                     <i class="fas fa-search absolute left-5 top-4 text-gray-400"></i>
                 </div>
-                <div class="w-full md:w-48 shrink-0">
+                <div class="w-full md:w-56 shrink-0">
                     <select id="categoryFilter" class="w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-sm rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white shadow-sm cursor-pointer">
                         <option value="Semua">Semua Kategori</option>
                     </select>
                 </div>
             </div>
+
+            <!-- Dynamic Category Filter Pills -->
+            <div id="categoryPillsContainer" class="flex items-center gap-2 overflow-x-auto pb-3 mb-5 no-scrollbar"></div>
 
             <div id="katalog-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-32">
                 <div class="col-span-full flex flex-col items-center justify-center py-20 text-gray-400">
@@ -284,8 +294,8 @@
                     <div id="cartItemsContainer" class="flex-1 overflow-y-auto space-y-3 pr-2 min-h-[200px]"></div>
                 </div>
 
-                <div class="w-full md:w-[360px] bg-gray-50 dark:bg-slate-700/30 p-5 rounded-xl border border-gray-100 dark:border-slate-700 shrink-0 h-fit space-y-3.5">
-                    <h4 class="text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Identitas & Waktu</h4>
+                <div class="w-full md:w-[370px] bg-gray-50 dark:bg-slate-700/30 p-5 rounded-xl border border-gray-100 dark:border-slate-700 shrink-0 h-fit space-y-3.5">
+                    <h4 class="text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Identitas & Waktu Peminjaman</h4>
                     
                     <div>
                         <label class="block text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 mb-1">Nama Lengkap *</label>
@@ -309,34 +319,41 @@
                     </div>
                     <div>
                         <label class="block text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 mb-1">Dosen Pengampu *</label>
-                        <input type="text" id="inputDosen" required placeholder="Nama Dosen (Jika untuk tugas)" class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:outline-none focus:border-blue-500">
+                        <input type="text" id="inputDosen" required placeholder="Nama Dosen (Jika untuk tugas kuliah)" class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:outline-none focus:border-blue-500">
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div class="col-span-1">
-                            <label class="block text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 mb-1">Tgl & Jam Pinjam *</label>
+                            <label class="block text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 mb-1">Tanggal & Jam Pinjam *</label>
                             <div class="flex gap-1">
-                                <input type="date" id="inputTanggal" required class="w-1/2 px-2 py-2 text-xs border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:outline-none focus:border-blue-500">
+                                <input type="date" id="inputTanggal" onchange="checkH3RuleWarning()" required class="w-1/2 px-2 py-2 text-xs border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:outline-none focus:border-blue-500">
                                 <input type="time" id="inputJamPinjam" required class="w-1/2 px-2 py-2 text-xs border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:outline-none focus:border-blue-500">
                             </div>
                         </div>
                         <div class="col-span-1">
-                            <label class="block text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 mb-1">Rencana Kembali *</label>
+                            <label class="block text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 mb-1">Tanggal & Jam Kembali *</label>
                             <div class="flex gap-1">
                                 <input type="date" id="inputTanggalKembali" required class="w-1/2 px-2 py-2 text-xs border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:outline-none focus:border-blue-500">
                                 <input type="time" id="inputJamKembali" required class="w-1/2 px-2 py-2 text-xs border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:outline-none focus:border-blue-500">
                             </div>
                         </div>
                     </div>
+
+                    <!-- Indikator Aturan H-3 -->
+                    <div id="h3WarningIndicator" class="hidden p-2.5 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 text-[11px] text-amber-700 dark:text-amber-300 flex items-start gap-2">
+                        <i class="fas fa-exclamation-circle mt-0.5 shrink-0"></i>
+                        <span>Tanggal pinjam yang dipilih kurang dari <strong>H-3 hari</strong> dari hari ini. Pastikan telah berkoordinasi dengan petugas laboratorium.</span>
+                    </div>
+
                     <div>
-                        <label class="block text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 mb-1">Keperluan Peminjaman *</label>
-                        <textarea id="inputKeperluan" required rows="2" placeholder="Sebutkan mata kuliah / acara / keperluan" class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:outline-none focus:border-blue-500 resize-none"></textarea>
+                        <label class="block text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 mb-1">Keperluan / Mata Kuliah *</label>
+                        <textarea id="inputKeperluan" required rows="2" placeholder="Sebutkan mata kuliah / acara / keperluan praktikum" class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:outline-none focus:border-blue-500 resize-none"></textarea>
                     </div>
 
                     <div class="pt-2 border-t border-gray-200 dark:border-slate-600 space-y-2.5">
                         <p class="text-[11px] font-bold uppercase text-gray-500 dark:text-gray-400">Ketentuan Checkout *</p>
                         <label class="flex items-start gap-2.5 cursor-pointer bg-blue-50/60 dark:bg-slate-800/60 p-2.5 rounded-lg border border-blue-100 dark:border-slate-600 hover:border-blue-300 transition-colors">
                             <input type="checkbox" id="checkH3" class="mt-0.5 w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer shrink-0">
-                            <span class="text-xs text-gray-700 dark:text-gray-300 leading-snug">Pengajuan peminjaman dilakukan maksimal <strong>H-3 hari</strong> sebelum waktu penggunaan.</span>
+                            <span class="text-xs text-gray-700 dark:text-gray-300 leading-snug">Pengajuan peminjaman dilakukan minimal <strong>H-3 hari</strong> sebelum waktu penggunaan.</span>
                         </label>
                         <label class="flex items-start gap-2.5 cursor-pointer bg-blue-50/60 dark:bg-slate-800/60 p-2.5 rounded-lg border border-blue-100 dark:border-slate-600 hover:border-blue-300 transition-colors">
                             <input type="checkbox" id="checkSyarat" class="mt-0.5 w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer shrink-0">
@@ -391,7 +408,7 @@
                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Dosen Pengampu:</p>
                     <p class="font-semibold text-gray-800 dark:text-white mb-3" id="confDosen">-</p>
 
-                    <p class="text-xs text-gray-500 dark:text-gray-400">Waktu Pinjam - Kembali:</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Tanggal & Jam Pinjam - Kembali:</p>
                     <p class="font-semibold text-gray-800 dark:text-white mb-3" id="confTanggal">-</p>
                     
                     <p class="text-xs text-gray-500 dark:text-gray-400">Barang/Ruang dipinjam:</p>
@@ -431,21 +448,26 @@
                 <div class="text-left text-sm space-y-2 mb-6 bg-gray-50 p-4 rounded border border-gray-100" id="receiptDetailBox"></div>
                 
                 <div class="flex justify-center mb-6">
-                    <div class="w-32 h-32 bg-gray-100 flex items-center justify-center rounded border border-gray-200">
-                        <i class="fas fa-qrcode text-6xl text-gray-400"></i>
+                    <div class="w-28 h-28 bg-gray-100 flex items-center justify-center rounded border border-gray-200">
+                        <i class="fas fa-qrcode text-5xl text-gray-400"></i>
                     </div>
                 </div>
                 
-                <p class="text-[10px] text-gray-400 mb-6">* Tunjukkan tiket ini (atau screenshot) kepada petugas jaga Laboratorium untuk verifikasi.</p>
+                <p class="text-[10px] text-gray-400 mb-4">* Tunjukkan tiket ini (atau screenshot) kepada petugas jaga Laboratorium untuk verifikasi.</p>
                 
-                <button onclick="tutupBuktiDanReset()" class="w-full py-3 text-sm font-bold text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors print:hidden shadow-lg">
-                    Selesai & Tutup
-                </button>
+                <div class="flex gap-2 print:hidden">
+                    <button onclick="window.print()" class="flex-1 py-2.5 text-xs font-bold text-blue-600 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors">
+                        <i class="fas fa-print mr-1"></i> Cetak Tiket
+                    </button>
+                    <button onclick="tutupBuktiDanReset()" class="flex-1 py-2.5 text-xs font-bold text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors shadow-lg">
+                        Selesai & Tutup
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL JADWAL PEMINJAMAN -->
+    <!-- MODAL JADWAL PEMINJAMAN PER ITEM -->
     <div id="jadwalModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-[80] p-4">
         <div class="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-md max-h-[80vh] flex flex-col shadow-2xl overflow-hidden relative">
             <div class="px-6 py-4 border-b border-gray-200 dark:border-slate-700 flex justify-between items-center bg-gray-50 dark:bg-slate-700/50">
@@ -464,6 +486,25 @@
         </div>
     </div>
 
+    <!-- MODAL CEK JADWAL PENGGUNAAN GLOBAL -->
+    <div id="globalScheduleModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-[85] p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-2xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden relative">
+            <div class="px-6 py-4 border-b border-gray-200 dark:border-slate-700 flex justify-between items-center bg-gray-50 dark:bg-slate-700/50">
+                <h3 class="font-bold text-lg text-gray-800 dark:text-white flex items-center gap-2">
+                    <i class="fas fa-calendar-alt text-blue-600 dark:text-blue-400"></i> Cek Jadwal Penggunaan Alat & Studio
+                </h3>
+                <button onclick="closeGlobalScheduleModal()" class="text-gray-400 hover:text-red-500 transition-colors">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-4 border-b border-gray-100 dark:border-slate-700 bg-blue-50/40 dark:bg-slate-800 flex flex-col sm:flex-row gap-3 items-center justify-between">
+                <p class="text-xs text-gray-600 dark:text-gray-300">Daftar seluruh jadwal peminjaman aktif dan pengajuan yang sedang berlangsung.</p>
+                <input type="text" id="searchGlobalSchedule" oninput="renderGlobalScheduleList()" placeholder="Filter nama / item..." class="w-full sm:w-56 px-3 py-1.5 text-xs bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div class="flex-1 overflow-y-auto p-4 space-y-2.5" id="globalScheduleListContainer"></div>
+        </div>
+    </div>
+
     <!-- MODAL PERINGATAN BENTROK JADWAL -->
     <div id="clashModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-[90] p-4">
         <div class="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl transform transition-all relative">
@@ -474,10 +515,10 @@
                 <h3 class="font-bold text-lg text-white">Jadwal Tabrakan!</h3>
             </div>
             <div class="p-5 text-center">
-                <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">Peminjaman gagal karena item/ruang di bawah ini tidak memiliki cukup sisa unit pada waktu tersebut:</p>
+                <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">Peminjaman gagal karena item/ruang di bawah ini tidak memiliki cukup sisa unit pada tanggal dan waktu tersebut:</p>
                 <div id="clashDetails" class="text-left bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-100 dark:border-red-800/50 text-xs font-semibold text-red-600 dark:text-red-400 mb-4 whitespace-pre-wrap"></div>
                 <button onclick="document.getElementById('clashModal').classList.add('hidden'); document.getElementById('clashModal').classList.remove('flex');" class="w-full py-2.5 text-sm font-bold text-white bg-gray-600 rounded-lg hover:bg-gray-700 transition-colors shadow-md">
-                    Kembali & Ubah Waktu
+                    Kembali & Ubah Tanggal
                 </button>
             </div>
         </div>
@@ -534,7 +575,7 @@
                 <h3 class="font-bold text-lg text-gray-800 dark:text-white">Akses Petugas</h3>
             </div>
             
-            <div class="space-y-4">
+            <form onsubmit="event.preventDefault(); verifyLogin();" class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Kata Sandi</label>
                     <div class="relative">
@@ -543,10 +584,10 @@
                     </div>
                     <p id="loginError" class="text-xs text-red-500 mt-1 hidden">Password salah.</p>
                 </div>
-                <button onclick="verifyLogin()" class="w-full py-2.5 text-sm font-bold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors shadow-md">
+                <button type="submit" class="w-full py-2.5 text-sm font-bold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors shadow-md">
                     Masuk
                 </button>
-            </div>
+            </form>
         </div>
     </div>
 
@@ -583,8 +624,8 @@
         <div class="flex-1 overflow-y-auto p-6 bg-slate-50 dark:bg-slate-900">
             <!-- Tab 1: Peminjaman -->
             <div id="tab-peminjaman" class="admin-tab-content space-y-4">
-                <div class="flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm">
-                    <h3 class="font-bold text-gray-800 dark:text-white">Riwayat & Pengembalian</h3>
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-800 p-4 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm">
+                    <h3 class="font-bold text-gray-800 dark:text-white">Riwayat & Pengembalian Peminjaman</h3>
                     <div class="flex items-center gap-4 text-sm font-semibold">
                         <div class="text-center px-4 border-r border-gray-200 dark:border-slate-600">
                             <span class="block text-gray-500 dark:text-gray-400 text-xs uppercase">Menunggu</span>
@@ -606,7 +647,7 @@
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-gray-50 dark:bg-slate-700/50 text-gray-500 dark:text-gray-400 text-[11px] uppercase tracking-wider border-b border-gray-200 dark:border-slate-700">
-                                    <th class="py-3 px-4 font-semibold">Tgl Pengajuan, Jadwal & Status</th>
+                                    <th class="py-3 px-4 font-semibold">Tanggal Pengajuan, Jadwal & Status</th>
                                     <th class="py-3 px-4 font-semibold">Peminjam</th>
                                     <th class="py-3 px-4 font-semibold">Daftar Item (Qty)</th>
                                     <th class="py-3 px-4 font-semibold text-right">Aksi Petugas</th>
@@ -620,20 +661,25 @@
 
             <!-- Tab 2: Stok & Status -->
             <div id="tab-stok" class="admin-tab-content hidden space-y-4">
-                <div class="flex justify-between items-center">
-                    <h3 class="font-bold text-gray-800 dark:text-white">Manajemen Stok Aktual</h3>
-                    <input type="text" id="searchAdminStok" oninput="renderAdminStok()" placeholder="Cari item..." class="px-3 py-1.5 text-sm border border-gray-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <h3 class="font-bold text-gray-800 dark:text-white">Manajemen Stok & Status Kondisi Aktual</h3>
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <input type="text" id="searchAdminStok" oninput="renderAdminStok()" placeholder="Cari item..." class="flex-1 sm:w-64 px-3 py-1.5 text-sm border border-gray-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500">
+                        <button onclick="switchAdminTab('tab-tambah')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg shadow-sm shrink-0">
+                            <i class="fas fa-plus mr-1"></i> Tambah Item
+                        </button>
+                    </div>
                 </div>
                 <div class="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-gray-50 dark:bg-slate-700/50 text-gray-500 dark:text-gray-400 text-[11px] uppercase tracking-wider border-b border-gray-200 dark:border-slate-700">
-                                    <th class="py-3 px-4 font-semibold w-12">ID</th>
+                                    <th class="py-3 px-4 font-semibold w-16">ID</th>
                                     <th class="py-3 px-4 font-semibold">Nama Item</th>
                                     <th class="py-3 px-4 font-semibold text-center w-44">Kategori / Jenis</th>
                                     <th class="py-3 px-4 font-semibold text-center w-32">Ubah Stok Unit</th>
-                                    <th class="py-3 px-4 font-semibold text-center w-40">Status Kondisi</th>
+                                    <th class="py-3 px-4 font-semibold text-center w-52">Status Kondisi</th>
                                     <th class="py-3 px-4 font-semibold text-center w-20">Hapus</th>
                                 </tr>
                             </thead>
@@ -678,7 +724,7 @@
                         </div>
                         
                         <div>
-                            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Link Gambar (Google Drive)</label>
+                            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Link Gambar (Google Drive / URL)</label>
                             <input type="url" id="newGambar" placeholder="https://drive.google.com/file/d/..." class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white rounded-lg focus:outline-none focus:border-blue-500 mb-2" oninput="previewNewImage()">
                             <div class="w-full h-40 bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-lg flex items-center justify-center overflow-hidden p-2">
                                 <img id="previewImage" src="" alt="Preview" class="max-h-full hidden">
@@ -709,7 +755,7 @@
                                 </p>
                             </div>
                             <button onclick="resetJurusanDefault()" type="button" class="px-3 py-1.5 text-xs font-semibold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 rounded-lg transition-colors shrink-0 w-fit">
-                                <i class="fas fa-undo mr-1"></i> Reset
+                                <i class="fas fa-undo mr-1"></i> Reset Default
                             </button>
                         </div>
 
@@ -734,7 +780,7 @@
                                 </p>
                             </div>
                             <button onclick="resetKategoriDefault()" type="button" class="px-3 py-1.5 text-xs font-semibold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 rounded-lg transition-colors shrink-0 w-fit">
-                                <i class="fas fa-undo mr-1"></i> Reset
+                                <i class="fas fa-undo mr-1"></i> Reset Default
                             </button>
                         </div>
 
@@ -759,7 +805,7 @@
                                 <i class="fas fa-database text-blue-600"></i> Pengaturan Koneksi Google Sheet (Darurat / Backup)
                             </h3>
                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                Jika sewaktu-waktu link Apps Script atau Google Sheet mengalami error/limit, Anda dapat menggantinya di sini tanpa perlu mengubah kode HTML.
+                                Terhubung langsung dengan URL Google Apps Script terbaru Lab Fikomm UMBY.
                             </p>
                         </div>
                         <span id="settingConnectionBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300 shrink-0 w-fit">
@@ -772,7 +818,7 @@
                             <label class="block text-xs font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">
                                 URL Web App Google Apps Script (<code class="text-blue-500">/exec</code>)
                             </label>
-                            <input type="url" id="inputSettingScriptUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2.5 text-xs font-mono border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <input type="url" id="inputSettingScriptUrl" placeholder="https://script.google.com/macros/s/AKfycbwl0Cnia72n1E-UOI7XSGegSIrUa0EV_aAcFM9qrqwfrJKCp39_AUqQJkZU9ERodJUv/exec" class="w-full px-3.5 py-2.5 text-xs font-mono border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <p class="text-[11px] text-gray-400 mt-1">Pastikan URL diakhiri dengan <code>/exec</code> dan di-deploy dengan akses <strong>"Siapa saja (Anyone)"</strong>.</p>
                         </div>
 
@@ -824,6 +870,22 @@
                             </button>
                         </div>
                     </div>
+
+                    <!-- Panel Kode Backend Kode.gs untuk Petugas -->
+                    <div class="pt-5 border-t border-gray-200 dark:border-slate-700 space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div>
+                                <h4 class="text-xs font-bold uppercase text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
+                                    <i class="fas fa-code text-blue-500"></i> Kode Backend Google Apps Script (<code>Kode.gs</code>)
+                                </h4>
+                                <p class="text-[11px] text-gray-400 mt-0.5">Jika Google Sheet Anda menggunakan script versi lama, salin kode di bawah ini ke menu <strong>Extensions &gt; Apps Script</strong> lalu pilih <strong>Deploy &gt; New version</strong>.</p>
+                            </div>
+                            <button onclick="copyKodeGsTemplate()" type="button" class="px-3.5 py-2 text-xs font-bold text-white bg-slate-700 hover:bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-500 rounded-lg transition-colors shrink-0 flex items-center gap-1.5 w-fit">
+                                <i class="fas fa-copy"></i> Salin Kode.gs
+                            </button>
+                        </div>
+                        <textarea id="kodeGsTemplateBox" readonly rows="6" class="w-full p-3 text-[11px] font-mono bg-slate-900 text-green-400 rounded-xl border border-slate-700 focus:outline-none resize-y"></textarea>
+                    </div>
                 </div>
             </div>
         </div>
@@ -831,18 +893,40 @@
 
     <!-- Script Integrasi JavaScript & Logika Web -->
     <script>
-        const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyzbjFsz0inxjHQTYlVCnz1GzVCHO6-aW2yVbVtJYN9Vvlh0dT1mTIwuZ3WuZ_J2kQx/exec;
+        const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwl0Cnia72n1E-UOI7XSGegSIrUa0EV_aAcFM9qrqwfrJKCp39_AUqQJkZU9ERodJUv/exec';
         const DEFAULT_SHEET_ID = '1TDfsWQNSmwHWFhr6VzmcCSfV89KBSY4qVa9U2slCqlo';
 
         const STORAGE_KEY_SCRIPT_URL = 'fikomm_custom_script_url';
         const STORAGE_KEY_SHEET_ID = 'fikomm_custom_sheet_id';
+        const STORAGE_KEY_URL_VERSION = 'fikomm_url_migration_v3';
+
+        // Paksa update localStorage ke URL Apps Script terbaru agar tidak tertahan cache lama
+        (function forceMigrateToNewScriptUrl() {
+            const savedUrl = localStorage.getItem(STORAGE_KEY_SCRIPT_URL) || '';
+            const migratedV3 = localStorage.getItem(STORAGE_KEY_URL_VERSION);
+            if (
+                !migratedV3 ||
+                !savedUrl ||
+                savedUrl.includes('AKfycbyDGyr') ||
+                savedUrl.includes('AKfycbyzbjF') ||
+                savedUrl.includes('DefaultBridge') ||
+                !savedUrl.includes('/exec')
+            ) {
+                localStorage.setItem(STORAGE_KEY_SCRIPT_URL, DEFAULT_SCRIPT_URL);
+                localStorage.setItem(STORAGE_KEY_SHEET_ID, DEFAULT_SHEET_ID);
+                localStorage.setItem(STORAGE_KEY_URL_VERSION, 'done');
+            }
+            localStorage.removeItem('fikomm_script_url');
+        })();
 
         function getActiveScriptUrl() {
-            return localStorage.getItem(STORAGE_KEY_SCRIPT_URL) || DEFAULT_SCRIPT_URL;
+            return (localStorage.getItem(STORAGE_KEY_SCRIPT_URL) || DEFAULT_SCRIPT_URL).trim();
         }
 
         function getActiveSheetId() {
-            return localStorage.getItem(STORAGE_KEY_SHEET_ID) || DEFAULT_SHEET_ID;
+            const raw = (localStorage.getItem(STORAGE_KEY_SHEET_ID) || DEFAULT_SHEET_ID).trim();
+            const match = raw.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+            return (match && match[1]) ? match[1] : raw;
         }
 
         const STORAGE_KEY_ALAT = 'fikomm_alat_v4';
@@ -889,13 +973,198 @@
         let currentMenu = 'semua';
         let isSyncing = false;
 
+        // Pencari nilai properti universal (case-insensitive, mengabaikan spasi/underscore)
+        function pickField(obj, candidates, defaultVal = '') {
+            if (!obj || typeof obj !== 'object') return defaultVal;
+            for (const key of candidates) {
+                if (obj[key] !== undefined && obj[key] !== null && String(obj[key]).trim() !== '') {
+                    return obj[key];
+                }
+            }
+            const normMap = {};
+            Object.keys(obj).forEach(k => {
+                const cleanKey = k.toLowerCase().replace(/[\s_-]+/g, '');
+                normMap[cleanKey] = obj[k];
+            });
+            for (const key of candidates) {
+                const cleanCandidate = key.toLowerCase().replace(/[\s_-]+/g, '');
+                if (normMap[cleanCandidate] !== undefined && normMap[cleanCandidate] !== null && String(normMap[cleanCandidate]).trim() !== '') {
+                    return normMap[cleanCandidate];
+                }
+            }
+            return defaultVal;
+        }
+
+        // Universal Data Normalizer untuk item Inventaris dari berbagai skema Google Sheet
+        function normalizeInventarisItem(item, index) {
+            if (!item || typeof item !== 'object') return null;
+
+            const rawId = pickField(item, ['ID_Alat', 'id', 'ID', 'IdAlat', 'Kode_Alat', 'kode', 'No'], `FK-${String(index + 1).padStart(2, '0')}`);
+            const rawNama = pickField(item, ['Nama_Alat', 'nama', 'Nama Alat', 'Nama', 'Nama_Barang', 'NamaItem', 'Item'], '');
+            if (!rawNama && !item.ID_Alat && !item.id) return null;
+
+            const rawKategori = pickField(item, ['Kategori', 'kategori', 'Jenis', 'jenis', 'Kategori_Alat'], 'Broadcasting');
+            const rawStok = pickField(item, ['Stok_Tersedia', 'stok', 'Stok', 'Stok Tersedia', 'Jumlah', 'qty', 'Unit'], 1);
+            const parsedStok = Number(rawStok);
+
+            let kondisi = String(pickField(item, ['Kondisi', 'status', 'Status', 'Kondisi_Alat', 'Keadaan'], 'Baik')).trim();
+            if (kondisi.toLowerCase() === 'tersedia' || kondisi.toLowerCase() === 'baik') kondisi = 'Baik';
+            else if (kondisi.toLowerCase().includes('fakultas')) kondisi = 'Digunakan Kegiatan Fakultas';
+            else if (kondisi.toLowerCase().includes('pinjam')) kondisi = 'Dipinjam';
+            else if (kondisi.toLowerCase().includes('rusak') || kondisi.toLowerCase().includes('perbaikan') || kondisi.toLowerCase().includes('maintenance')) kondisi = 'Rusak';
+            else if (kondisi.toLowerCase().includes('kurang')) kondisi = 'Kurang Baik';
+
+            let gambar = String(pickField(item, ['Gambar_URL', 'gambar', 'Gambar', 'Link Gambar', 'URL_Gambar', 'foto', 'image', 'ikon'], '')).trim();
+            if (gambar.startsWith('fa-')) gambar = '';
+
+            const spek = String(pickField(item, ['Spesifikasi', 'deskripsi', 'Deskripsi', 'Spek', 'Keterangan', 'Detail'], '')).trim();
+
+            return {
+                ID_Alat: String(rawId).trim(),
+                Nama_Alat: String(rawNama || `Item Lab ${index + 1}`).trim(),
+                Kategori: String(rawKategori).trim(),
+                Stok_Tersedia: isNaN(parsedStok) ? 0 : parsedStok,
+                Kondisi: kondisi,
+                Gambar_URL: gambar,
+                Spesifikasi: spek
+            };
+        }
+
+        // Universal Data Normalizer untuk item Peminjaman
+        function normalizePeminjamanItem(pj) {
+            if (!pj || typeof pj !== 'object') return null;
+
+            let rawItems = pickField(pj, ['items', 'itemsJson', 'Daftar_Item', 'barang'], []);
+            if (typeof rawItems === 'string' && rawItems.trim() !== '') {
+                try {
+                    rawItems = JSON.parse(rawItems);
+                } catch (e) {
+                    rawItems = [{ id: 'ITEM', nama: rawItems, qty: 1 }];
+                }
+            }
+            if (!Array.isArray(rawItems)) rawItems = [];
+
+            rawItems = rawItems.map(it => ({
+                id: String(it.id || it.ID_Alat || 'FK-01'),
+                nama: String(it.nama || it.Nama_Alat || 'Alat Lab'),
+                kategori: String(it.kategori || it.Kategori || 'Alat'),
+                qty: Number(it.qty || it.jumlah || 1) || 1,
+                kondisiKembali: it.kondisiKembali || ''
+            }));
+
+            let status = String(pickField(pj, ['status', 'statusPersetujuan', 'Status_Peminjaman', 'Status'], 'Menunggu Konfirmasi')).trim();
+            if (status === 'Menunggu Persetujuan' || status.toLowerCase().includes('menunggu')) status = 'Menunggu Konfirmasi';
+            else if (status === 'Disetujui / Dipinjam' || status.toLowerCase().includes('dipinjam') || status.toLowerCase() === 'acc') status = 'Sedang Dipinjam';
+            else if (status === 'Selesai / Dikembalikan' || status.toLowerCase().includes('kembali') || status.toLowerCase().includes('selesai')) status = 'Dikembalikan';
+            else if (status.toLowerCase().includes('tolak')) status = 'Ditolak';
+
+            const tglPinjam = pickField(pj, ['tanggalPinjam', 'tglPinjam', 'Tanggal_Pinjam'], '');
+            const tglKembali = pickField(pj, ['tanggalKembali', 'tglKembali', 'Tanggal_Kembali'], tglPinjam);
+
+            return {
+                idPinjam: String(pickField(pj, ['idPinjam', 'id', 'ID_Pinjam', 'ID'], 'PJ-' + Date.now().toString().slice(-6))),
+                tanggalPengajuan: String(pickField(pj, ['tanggalPengajuan', 'tglPengajuan', 'Tanggal_Pengajuan'], '')),
+                jamPengajuan: String(pickField(pj, ['jamPengajuan', 'waktuPengajuan', 'Jam_Pengajuan'], '')),
+                nama: String(pickField(pj, ['nama', 'Nama_Peminjam', 'Nama'], 'Mahasiswa')),
+                nim: String(pickField(pj, ['nim', 'NIM'], '-')),
+                wa: String(pickField(pj, ['wa', 'noWa', 'WhatsApp', 'No_WA'], '-')),
+                prodi: String(pickField(pj, ['prodi', 'jurusan', 'Jurusan', 'Konsentrasi'], 'Lainnya / Umum')),
+                dosen: String(pickField(pj, ['dosen', 'Dosen_Pengampu', 'Dosen'], '-')),
+                tanggalPinjam: String(tglPinjam),
+                jamPinjam: String(pickField(pj, ['jamPinjam', 'Jam_Pinjam'], '09:00')),
+                tanggalKembali: String(tglKembali),
+                jamKembali: String(pickField(pj, ['jamKembali', 'Jam_Kembali'], '15:00')),
+                keperluan: String(pickField(pj, ['keperluan', 'Keperluan', 'Mata_Kuliah'], '-')),
+                items: rawItems,
+                status: status,
+                catatanKembali: String(pickField(pj, ['catatanKembali', 'Catatan_Kembali', 'kondisiKembali'], ''))
+            };
+        }
+
+        function extractCloudPayload(rawJson) {
+            if (!rawJson) return null;
+            if (Array.isArray(rawJson)) {
+                return { inventaris: rawJson, peminjaman: [], jurusan: [], kategori: [] };
+            }
+            const source = (rawJson.data && typeof rawJson.data === 'object' && !Array.isArray(rawJson.data))
+                ? rawJson.data
+                : rawJson;
+
+            const inv = source.inventaris || source.alat || source.items || source.katalog || (Array.isArray(rawJson.data) ? rawJson.data : null);
+            const pinjam = source.peminjaman || source.loans || source.riwayat || source.booking || [];
+            const jur = source.jurusan || source.prodi || [];
+            const kat = source.kategori || source.jenis || [];
+
+            return {
+                inventaris: Array.isArray(inv) ? inv : [],
+                peminjaman: Array.isArray(pinjam) ? pinjam : [],
+                jurusan: Array.isArray(jur) ? jur : [],
+                kategori: Array.isArray(kat) ? kat : []
+            };
+        }
+
+        async function fetchCloudWithFallback(scriptUrl, sheetId) {
+            // 1. Jika dijalankan di dalam Google Apps Script iframe langsung
+            if (typeof google !== 'undefined' && google.script && google.script.run) {
+                try {
+                    const gasData = await new Promise((resolve, reject) => {
+                        google.script.run
+                            .withSuccessHandler(resolve)
+                            .withFailureHandler(reject)
+                            .getAllSheetData(sheetId);
+                    });
+                    if (gasData && !gasData.error) return gasData;
+                } catch (e) {}
+            }
+
+            // 2. Multi-Fallback Fetch GET (?action=get_all -> ?action=getData -> URL polos)
+            const sep = scriptUrl.includes('?') ? '&' : '?';
+            const endpoints = [
+                `${scriptUrl}${sep}action=get_all&sheetId=${encodeURIComponent(sheetId)}&t=${Date.now()}`,
+                `${scriptUrl}${sep}action=getData&sheetId=${encodeURIComponent(sheetId)}&t=${Date.now()}`,
+                `${scriptUrl}${sep}sheetId=${encodeURIComponent(sheetId)}&t=${Date.now()}`
+            ];
+
+            let lastError = null;
+            for (const url of endpoints) {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 14000);
+                try {
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        mode: 'cors',
+                        redirect: 'follow',
+                        cache: 'no-store',
+                        signal: controller.signal
+                    });
+                    clearTimeout(timeoutId);
+                    const text = await response.text();
+                    const parsed = JSON.parse(text);
+                    if (parsed && !parsed.error && parsed.status !== 'error') {
+                        return parsed;
+                    }
+                    lastError = new Error(parsed?.error || parsed?.message || 'Respons error');
+                } catch (err) {
+                    clearTimeout(timeoutId);
+                    lastError = err;
+                }
+            }
+            throw lastError || new Error('Tidak dapat menghubungi URL Google Apps Script');
+        }
+
         async function initApp() {
             const searchInput = document.getElementById('searchInput');
             const categoryFilter = document.getElementById('categoryFilter');
             if (searchInput) searchInput.addEventListener('input', renderKatalog);
-            if (categoryFilter) categoryFilter.addEventListener('change', renderKatalog);
+            if (categoryFilter) {
+                categoryFilter.addEventListener('change', () => {
+                    renderCategoryPills();
+                    renderKatalog();
+                });
+            }
 
             setDefaultDateTime();
+            populateKodeGsTemplateBox();
 
             const localAlat = localStorage.getItem(STORAGE_KEY_ALAT);
             const localPinjam = localStorage.getItem(STORAGE_KEY_PINJAM);
@@ -903,14 +1172,22 @@
             const localKategori = localStorage.getItem(STORAGE_KEY_KATEGORI);
             
             if (localAlat) {
-                try { dataAlatLab = JSON.parse(localAlat); } catch(e) { dataAlatLab = [...defaultAlat]; }
+                try {
+                    dataAlatLab = JSON.parse(localAlat).map(normalizeInventarisItem).filter(Boolean);
+                } catch(e) {
+                    dataAlatLab = [...defaultAlat];
+                }
             }
             if (!Array.isArray(dataAlatLab) || dataAlatLab.length === 0) {
                 dataAlatLab = [...defaultAlat];
             }
             
             if (localPinjam) {
-                try { dataPeminjaman = JSON.parse(localPinjam); } catch(e) { dataPeminjaman = []; }
+                try {
+                    dataPeminjaman = JSON.parse(localPinjam).map(normalizePeminjamanItem).filter(Boolean);
+                } catch(e) {
+                    dataPeminjaman = [];
+                }
             }
 
             if (localJurusan) {
@@ -933,106 +1210,224 @@
             renderKatalog();
             updateCartBadge();
             
-            await syncWithCloud();
-            setInterval(syncWithCloud, 25000);
+            await syncWithCloud(false);
+            setInterval(() => syncWithCloud(false), 30000);
         }
 
         function setDefaultDateTime() {
             const now = new Date();
+            now.setDate(now.getDate() + 3); // Default H-3
             const yyyy = now.getFullYear();
             const mm = String(now.getMonth() + 1).padStart(2, '0');
             const dd = String(now.getDate()).padStart(2, '0');
-            const todayStr = `${yyyy}-${mm}-${dd}`;
+            const defaultDateStr = `${yyyy}-${mm}-${dd}`;
 
             const tglPinjam = document.getElementById('inputTanggal');
             const tglKembali = document.getElementById('inputTanggalKembali');
             const jamPinjam = document.getElementById('inputJamPinjam');
             const jamKembali = document.getElementById('inputJamKembali');
 
-            if (tglPinjam && !tglPinjam.value) tglPinjam.value = todayStr;
-            if (tglKembali && !tglKembali.value) tglKembali.value = todayStr;
+            if (tglPinjam && !tglPinjam.value) tglPinjam.value = defaultDateStr;
+            if (tglKembali && !tglKembali.value) tglKembali.value = defaultDateStr;
             if (jamPinjam && !jamPinjam.value) jamPinjam.value = '09:00';
             if (jamKembali && !jamKembali.value) jamKembali.value = '15:00';
+            checkH3RuleWarning();
+        }
+
+        function checkH3RuleWarning() {
+            const tglVal = document.getElementById('inputTanggal')?.value;
+            const warnEl = document.getElementById('h3WarningIndicator');
+            if (!tglVal || !warnEl) return;
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const selected = new Date(`${tglVal}T00:00:00`);
+            const diffDays = Math.round((selected - today) / (1000 * 60 * 60 * 24));
+
+            if (diffDays < 3) {
+                warnEl.classList.remove('hidden');
+            } else {
+                warnEl.classList.add('hidden');
+            }
         }
 
         function updateSyncStatus(htmlText, colorClass) {
             const el = document.getElementById('syncStatus');
             if (!el) return;
-            el.className = `hidden sm:flex items-center text-xs font-semibold mr-2 ${colorClass || 'text-gray-500 dark:text-gray-400'}`;
+            el.className = `hidden sm:flex items-center text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-slate-700/50 border border-gray-200 dark:border-slate-600 transition-colors ${colorClass || 'text-gray-500 dark:text-gray-400'}`;
             el.innerHTML = htmlText;
         }
 
-        async function syncWithCloud() {
+        async function syncWithCloud(showManualToast = false) {
             if (isSyncing) return;
             isSyncing = true;
-            updateSyncStatus('<i class="fas fa-sync fa-spin text-blue-500 mr-1"></i> Sinkronisasi...', 'text-blue-500');
-            
+            updateSyncStatus('<i class="fas fa-sync fa-spin text-blue-500 mr-1.5"></i> Sinkronisasi...', 'text-blue-500');
+            const btnIcon = document.getElementById('headerSyncBtnIcon');
+            if (btnIcon) btnIcon.classList.add('fa-spin');
+
             try {
                 const scriptUrl = getActiveScriptUrl();
                 const sheetId = getActiveSheetId();
-                const url = `${scriptUrl}?action=get_all&sheetId=${encodeURIComponent(sheetId)}&t=${Date.now()}`;
-                const response = await fetch(url);
-                const data = await response.json();
+                const rawData = await fetchCloudWithFallback(scriptUrl, sheetId);
+                const extracted = extractCloudPayload(rawData);
 
-                if (data.error) throw new Error(data.error);
+                if (!extracted) throw new Error('Format data tidak dikenali');
 
-                if (Array.isArray(data.inventaris) && data.inventaris.length > 0) {
-                    dataAlatLab = data.inventaris.map(item => ({
-                        ...item,
-                        Stok_Tersedia: Number(item.Stok_Tersedia) || 0
-                    }));
+                const normalizedInv = extracted.inventaris.map(normalizeInventarisItem).filter(Boolean);
+                const normalizedPinjam = extracted.peminjaman.map(normalizePeminjamanItem).filter(Boolean);
+                const cleanJurusan = extracted.jurusan
+                    .map(j => (typeof j === 'object' ? (j.Nama_Jurusan || j['Nama Jurusan'] || j.nama || '') : String(j)))
+                    .map(s => s.trim())
+                    .filter(Boolean);
+                const cleanKategori = extracted.kategori
+                    .map(k => (typeof k === 'object' ? (k.Nama_Kategori || k['Nama Kategori'] || k.nama || '') : String(k)))
+                    .map(s => s.trim())
+                    .filter(Boolean);
+
+                // Auto-Seed otomatis jika Google Sheet di URL baru masih kosong (0 baris alat)
+                if (normalizedInv.length === 0 && dataAlatLab.length > 0) {
+                    await pushToCloud();
+                    updateSyncStatus(`<i class="fas fa-check-circle text-green-500 mr-1.5"></i> Sheet Diinisialisasi (${dataAlatLab.length} Alat)`, 'text-green-600 dark:text-green-400');
+                    if (showManualToast) showToast('Sheet kosong berhasil diisi dengan data katalog awal!', 'success');
+                    return;
                 }
 
-                if (Array.isArray(data.peminjaman)) {
-                    dataPeminjaman = data.peminjaman;
+                if (normalizedInv.length > 0) {
+                    dataAlatLab = normalizedInv;
                 }
 
-                if (Array.isArray(data.jurusan) && data.jurusan.length > 0) {
-                    dataJurusan = data.jurusan;
+                dataPeminjaman = normalizedPinjam;
+
+                if (cleanJurusan.length > 0) {
+                    dataJurusan = cleanJurusan;
+                } else {
+                    const ekstraKat = [...new Set(dataAlatLab.map(a => a.Kategori).filter(Boolean))];
+                    if (ekstraKat.length > 0) {
+                        dataKategori = [...new Set([...dataKategori, ...ekstraKat])];
+                    }
                 }
 
-                if (Array.isArray(data.kategori) && data.kategori.length > 0) {
-                    dataKategori = data.kategori;
+                if (cleanKategori.length > 0) {
+                    dataKategori = cleanKategori;
+                } else {
+                    const ekstraKat = [...new Set(dataAlatLab.map(a => a.Kategori).filter(Boolean))];
+                    if (ekstraKat.length > 0) {
+                        dataKategori = [...new Set([...dataKategori, ...ekstraKat])];
+                    }
                 }
                 
                 renderDropdownJurusan();
                 renderDropdownKategori();
                 saveDataLocally();
                 renderKatalog();
-                updateSyncStatus('<i class="fas fa-cloud-check text-green-500 mr-1"></i> Data Tersinkronisasi', 'text-gray-500');
+                if (!document.getElementById('petugasPanelModal')?.classList.contains('hidden')) {
+                    renderAdminPeminjaman();
+                    renderAdminStok();
+                    renderAdminJurusan();
+                    renderAdminKategori();
+                }
+
+                updateSyncStatus(`<i class="fas fa-check-circle text-green-500 mr-1.5"></i> Terhubung (${dataAlatLab.length} Alat)`, 'text-green-600 dark:text-green-400');
+                if (showManualToast) {
+                    showToast(`Berhasil menyinkronkan ${dataAlatLab.length} item katalog dari Google Sheet!`, 'success');
+                }
             } catch (err) {
-                updateSyncStatus('<i class="fas fa-cloud-slash text-amber-500 mr-1"></i> Mode Lokal Aktif', 'text-amber-500');
+                updateSyncStatus('<i class="fas fa-exclamation-triangle text-amber-500 mr-1.5"></i> Mode Lokal Aktif', 'text-amber-500');
+                if (showManualToast) {
+                    showToast('Gagal menarik data dari Apps Script. Pastikan akses Web App di-set "Anyone".', 'error');
+                }
             } finally {
                 isSyncing = false;
+                if (btnIcon) btnIcon.classList.remove('fa-spin');
             }
         }
 
         async function pushToCloud() {
-            updateSyncStatus('<i class="fas fa-arrow-up text-blue-500 mr-1"></i> Menyimpan ke Cloud...', 'text-blue-500');
+            updateSyncStatus('<i class="fas fa-arrow-up text-blue-500 mr-1.5"></i> Menyimpan ke Cloud...', 'text-blue-500');
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 18000);
+
             try {
                 const scriptUrl = getActiveScriptUrl();
                 const sheetId = getActiveSheetId();
+
+                // Kirim properti format ganda (Huruf Besar & kecil) agar kompatibel dengan semua versi Kode.gs
+                const dualInventaris = dataAlatLab.map((item, idx) => ({
+                    ID_Alat: item.ID_Alat || `FK-${String(idx + 1).padStart(2, '0')}`,
+                    Nama_Alat: item.Nama_Alat || '',
+                    Kategori: item.Kategori || 'Broadcasting',
+                    Stok_Tersedia: Number(item.Stok_Tersedia) || 0,
+                    Kondisi: item.Kondisi || 'Baik',
+                    Gambar_URL: item.Gambar_URL || '',
+                    Spesifikasi: item.Spesifikasi || '',
+                    id: item.ID_Alat || `FK-${String(idx + 1).padStart(2, '0')}`,
+                    nama: item.Nama_Alat || '',
+                    kategori: item.Kategori || 'Broadcasting',
+                    stok: Number(item.Stok_Tersedia) || 0,
+                    status: item.Kondisi || 'Baik',
+                    ikon: item.Gambar_URL || 'fa-video',
+                    deskripsi: item.Spesifikasi || ''
+                }));
+
+                const dualPeminjaman = dataPeminjaman.map(p => ({
+                    ...p,
+                    id: p.idPinjam,
+                    jurusan: p.prodi,
+                    tglPinjam: p.tanggalPinjam,
+                    tglKembali: p.tanggalKembali,
+                    itemsJson: JSON.stringify(p.items || []),
+                    statusPersetujuan: p.status,
+                    kondisiKembali: p.catatanKembali || ''
+                }));
+
                 const payload = {
                     action: 'sync_all',
+                    actionAlt: 'syncAll',
                     sheetId: sheetId,
-                    inventaris: dataAlatLab,
-                    peminjaman: dataPeminjaman,
+                    inventaris: dualInventaris,
+                    peminjaman: dualPeminjaman,
                     jurusan: dataJurusan,
                     kategori: dataKategori
                 };
+
+                if (typeof google !== 'undefined' && google.script && google.script.run) {
+                    try {
+                        await new Promise((resolve, reject) => {
+                            google.script.run
+                                .withSuccessHandler(resolve)
+                                .withFailureHandler(reject)
+                                .processAction(payload);
+                        });
+                        clearTimeout(timeoutId);
+                        updateSyncStatus(`<i class="fas fa-check-circle text-green-500 mr-1.5"></i> Tersimpan di Cloud`, 'text-green-600 dark:text-green-400');
+                        return;
+                    } catch (e) {}
+                }
                 
                 const response = await fetch(scriptUrl, {
                     method: 'POST',
-                    body: JSON.stringify(payload)
+                    mode: 'cors',
+                    redirect: 'follow',
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8'
+                    },
+                    body: JSON.stringify(payload),
+                    signal: controller.signal
                 });
-                const res = await response.json();
-                if (res && res.status === 'success') {
-                    updateSyncStatus('<i class="fas fa-cloud-check text-green-500 mr-1"></i> Tersimpan di Cloud', 'text-green-600');
+                clearTimeout(timeoutId);
+
+                const rawText = await response.text();
+                let res = {};
+                try { res = JSON.parse(rawText); } catch (e) {}
+
+                if (res && !res.error && res.status !== 'error') {
+                    updateSyncStatus('<i class="fas fa-check-circle text-green-500 mr-1.5"></i> Tersimpan di Cloud', 'text-green-600 dark:text-green-400');
                 } else {
-                    throw new Error('Gagal menyimpan');
+                    throw new Error(res?.error || res?.message || 'Gagal menyimpan');
                 }
             } catch (err) {
-                updateSyncStatus('<i class="fas fa-exclamation-circle text-amber-500 mr-1"></i> Tersimpan Lokal', 'text-amber-500');
+                clearTimeout(timeoutId);
+                updateSyncStatus('<i class="fas fa-exclamation-circle text-amber-500 mr-1.5"></i> Tersimpan Lokal', 'text-amber-500');
             }
         }
 
@@ -1194,6 +1589,35 @@
                     newKatEl.appendChild(opt);
                 });
             }
+
+            renderCategoryPills();
+        }
+
+        function renderCategoryPills() {
+            const pillsContainer = document.getElementById('categoryPillsContainer');
+            const filterEl = document.getElementById('categoryFilter');
+            if (!pillsContainer || !filterEl) return;
+
+            const activeCat = filterEl.value || 'Semua';
+            const allCats = ['Semua', ...dataKategori];
+
+            pillsContainer.innerHTML = allCats.map(kat => {
+                const isActive = kat === activeCat;
+                return `
+                    <button onclick="selectCategoryPill('${kat.replace(/'/g, "\\'")}')" class="px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${isActive ? 'bg-blue-600 text-white shadow-sm' : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-slate-700 hover:border-blue-400'}">
+                        ${kat === 'Semua' ? 'Semua Kategori' : kat}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function selectCategoryPill(kat) {
+            const filterEl = document.getElementById('categoryFilter');
+            if (filterEl) {
+                filterEl.value = kat;
+                renderCategoryPills();
+                renderKatalog();
+            }
         }
 
         function renderAdminKategori() {
@@ -1353,9 +1777,9 @@
             return clean;
         }
 
-        function formatRentangJadwal(tglPinjam, jamPinjam, tglKembali, jamKembali) {
-            const d1 = normalizeDateStr(tglPinjam);
-            const d2 = normalizeDateStr(tglKembali || tglPinjam);
+        function formatRentangJadwal(tanggalPinjam, jamPinjam, tanggalKembali, jamKembali) {
+            const d1 = normalizeDateStr(tanggalPinjam);
+            const d2 = normalizeDateStr(tanggalKembali || tanggalPinjam);
             const t1 = normalizeTimeStr(jamPinjam, '08:00');
             const t2 = normalizeTimeStr(jamKembali, '16:00');
 
@@ -1412,7 +1836,7 @@
             const titleEl = document.getElementById('mainTitle');
             if (titleEl) {
                 if (menu === 'alat') titleEl.textContent = 'Peminjaman Alat Laboratorium';
-                else if (menu === 'ruangan') titleEl.textContent = 'Peminjaman Fasilitas Ruangan';
+                else if (menu === 'ruangan') titleEl.textContent = 'Peminjaman Ruangan & Studio';
                 else titleEl.textContent = 'Semua Katalog Inventaris';
             }
             closeMobileSidebar();
@@ -1429,7 +1853,8 @@
             const filtered = dataAlatLab.filter(item => {
                 const matchSearch = (item.Nama_Alat || '').toLowerCase().includes(keyword) ||
                                     (item.ID_Alat || '').toLowerCase().includes(keyword) ||
-                                    (item.Kategori || '').toLowerCase().includes(keyword);
+                                    (item.Kategori || '').toLowerCase().includes(keyword) ||
+                                    (item.Spesifikasi || '').toLowerCase().includes(keyword);
                 const matchCat = category === 'Semua' || item.Kategori === category;
 
                 let matchMenu = true;
@@ -1453,20 +1878,23 @@
 
             filtered.forEach(item => {
                 const stok = Number(item.Stok_Tersedia) || 0;
-                const isRusak = item.Kondisi === 'Rusak';
+                const isRusak = item.Kondisi === 'Rusak' || item.Kondisi === 'Maintenance';
                 const isFakultas = item.Kondisi === 'Digunakan Kegiatan Fakultas';
+                const isDipinjam = item.Kondisi === 'Dipinjam' || (stok <= 0 && !isRusak && !isFakultas);
                 const imgUrl = formatDriveUrl(item.Gambar_URL);
 
                 let badgeHtml = '';
                 if (isRusak) {
-                    badgeHtml = `<span class="px-2.5 py-1 bg-red-600 text-white text-[10px] font-bold rounded-full uppercase shadow">Rusak / Perbaikan</span>`;
+                    badgeHtml = `<span class="px-2.5 py-1 bg-red-600 text-white text-[10px] font-bold rounded-full uppercase shadow">Rusak / Maintenance</span>`;
                 } else if (isFakultas) {
                     badgeHtml = `<span class="px-2.5 py-1 bg-purple-600 text-white text-[10px] font-bold rounded-full uppercase shadow"><i class="fas fa-university mr-1"></i> Digunakan Kegiatan Fakultas</span>`;
-                } else if (stok > 0) {
+                } else if (!isDipinjam && stok > 0) {
                     badgeHtml = `<span class="px-2.5 py-1 bg-green-500 text-white text-[10px] font-bold rounded-full uppercase shadow">Tersedia: ${stok}</span>`;
                 } else {
-                    badgeHtml = `<span class="px-2.5 py-1 bg-amber-500 text-white text-[10px] font-bold rounded-full uppercase shadow">Stok Kosong (Bisa Booking)</span>`;
+                    badgeHtml = `<span class="px-2.5 py-1 bg-amber-500 text-white text-[10px] font-bold rounded-full uppercase shadow">Dipinjam (Bisa Booking)</span>`;
                 }
+
+                const canDirectBorrow = stok > 0 && !isFakultas && !isDipinjam;
 
                 const card = `
                     <div class="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 overflow-hidden wix-shadow hover-zoom flex flex-col justify-between transition-all duration-200">
@@ -1495,9 +1923,9 @@
                                     <span class="whitespace-normal break-words leading-tight text-center">Tidak Tersedia</span>
                                 </button>
                             ` : `
-                                <button onclick="addToCart('${item.ID_Alat}')" class="min-h-[42px] flex-1 px-3 py-2 rounded-xl font-bold text-xs text-white ${stok > 0 && !isFakultas ? 'bg-blue-600 hover:bg-blue-700' : 'bg-amber-500 hover:bg-amber-600'} transition-colors flex items-center justify-center gap-1.5 shadow-sm">
+                                <button onclick="addToCart('${item.ID_Alat}')" class="min-h-[42px] flex-1 px-3 py-2 rounded-xl font-bold text-xs text-white ${canDirectBorrow ? 'bg-blue-600 hover:bg-blue-700' : 'bg-amber-500 hover:bg-amber-600'} transition-colors flex items-center justify-center gap-1.5 shadow-sm">
                                     <i class="fas fa-clipboard-list shrink-0 text-xs sm:text-sm"></i>
-                                    <span class="whitespace-normal break-words leading-tight text-center">${stok > 0 && !isFakultas ? 'Tambah Pinjam' : 'Booking Tanggal Lain'}</span>
+                                    <span class="whitespace-normal break-words leading-tight text-center">${canDirectBorrow ? 'Tambah Pinjam' : 'Booking Tanggal Lain'}</span>
                                 </button>
                             `}
                         </div>
@@ -1512,8 +1940,8 @@
             const alat = dataAlatLab.find(a => a.ID_Alat === idAlat);
             if (!alat) return;
 
-            if (alat.Kondisi === 'Rusak') {
-                showToast('Item sedang rusak dan tidak dapat dipinjam.', 'error');
+            if (alat.Kondisi === 'Rusak' || alat.Kondisi === 'Maintenance') {
+                showToast('Item sedang dalam perbaikan dan tidak dapat dipinjam.', 'error');
                 return;
             }
 
@@ -1534,10 +1962,10 @@
                     kategori: alat.Kategori,
                     qty: 1
                 });
-                if (Number(alat.Stok_Tersedia) <= 0 || alat.Kondisi === 'Digunakan Kegiatan Fakultas') {
+                if (Number(alat.Stok_Tersedia) <= 0 || alat.Kondisi === 'Digunakan Kegiatan Fakultas' || alat.Kondisi === 'Dipinjam') {
                     showToast(`${alat.Nama_Alat} masuk daftar booking. Silakan pilih tanggal yang tidak bentrok.`, 'info');
                 } else {
-                    showToast(`${alat.Nama_Alat} ditambahkan ke catatan pinjaman!`, 'success');
+                    showToast(`${alat.Nama_Alat} ditambahkan ke keranjang peminjaman!`, 'success');
                 }
             }
 
@@ -1583,6 +2011,7 @@
         function openCartModal() {
             closeMobileSidebar();
             renderCartItems();
+            checkH3RuleWarning();
             const modal = document.getElementById('cartModal');
             if (modal) {
                 modal.classList.remove('hidden');
@@ -1668,17 +2097,17 @@
             const wa = document.getElementById('inputWa')?.value.trim();
             const prodi = document.getElementById('inputProdi')?.value.trim();
             const dosen = document.getElementById('inputDosen')?.value.trim();
-            const tglPinjam = document.getElementById('inputTanggal')?.value;
+            const tanggalPinjam = document.getElementById('inputTanggal')?.value;
             const jamPinjam = document.getElementById('inputJamPinjam')?.value;
-            const tglKembali = document.getElementById('inputTanggalKembali')?.value;
+            const tanggalKembali = document.getElementById('inputTanggalKembali')?.value;
             const jamKembali = document.getElementById('inputJamKembali')?.value;
             const keperluan = document.getElementById('inputKeperluan')?.value.trim();
 
             const checkH3 = document.getElementById('checkH3')?.checked;
             const checkSyarat = document.getElementById('checkSyarat')?.checked;
 
-            if (!nama || !nim || !wa || !prodi || !dosen || !tglPinjam || !jamPinjam || !tglKembali || !jamKembali || !keperluan) {
-                showToast('Harap lengkapi seluruh kolom identitas dan waktu!', 'error');
+            if (!nama || !nim || !wa || !prodi || !dosen || !tanggalPinjam || !jamPinjam || !tanggalKembali || !jamKembali || !keperluan) {
+                showToast('Harap lengkapi seluruh kolom identitas dan tanggal peminjaman!', 'error');
                 return;
             }
 
@@ -1687,11 +2116,11 @@
                 return;
             }
 
-            const startMs = parseDateTimeMs(tglPinjam, jamPinjam, false);
-            const endMs = parseDateTimeMs(tglKembali, jamKembali, true);
+            const startMs = parseDateTimeMs(tanggalPinjam, jamPinjam, false);
+            const endMs = parseDateTimeMs(tanggalKembali, jamKembali, true);
 
             if (endMs < startMs) {
-                showToast('Waktu rencana kembali tidak boleh lebih awal dari waktu pinjam!', 'error');
+                showToast('Tanggal dan waktu kembali tidak boleh lebih awal dari waktu pinjam!', 'error');
                 return;
             }
 
@@ -1718,7 +2147,7 @@
 
                 const sisaTersediaPadaJamItu = maxUnit - terpakaiDiJamSama;
                 if (cartItem.qty > sisaTersediaPadaJamItu) {
-                    clashList.push(`• ${cartItem.nama}: Diminta ${cartItem.qty} unit, sisa tersedia di jam tersebut ${Math.max(0, sisaTersediaPadaJamItu)} unit.`);
+                    clashList.push(`• ${cartItem.nama}: Diminta ${cartItem.qty} unit, sisa tersedia di tanggal & jam tersebut ${Math.max(0, sisaTersediaPadaJamItu)} unit.`);
                 }
             });
 
@@ -1730,21 +2159,21 @@
             }
 
             const now = new Date();
-            const tglAjuan = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-            const jamAjuan = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+            const tanggalPengajuan = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+            const jamPengajuan = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
             pendingLoanDraft = {
                 idPinjam: 'PJ-' + Date.now().toString().slice(-6),
-                tanggalPengajuan: tglAjuan,
-                jamPengajuan: jamAjuan,
+                tanggalPengajuan: tanggalPengajuan,
+                jamPengajuan: jamPengajuan,
                 nama,
                 nim,
                 wa,
                 prodi,
                 dosen,
-                tanggalPinjam: tglPinjam,
+                tanggalPinjam: tanggalPinjam,
                 jamPinjam,
-                tanggalKembali: tglKembali,
+                tanggalKembali: tanggalKembali,
                 jamKembali,
                 keperluan,
                 items: JSON.parse(JSON.stringify(cart)),
@@ -1756,7 +2185,7 @@
             document.getElementById('confNimProdi').textContent = `${nim} / ${prodi}`;
             document.getElementById('confWa').textContent = wa;
             document.getElementById('confDosen').textContent = dosen;
-            document.getElementById('confTanggal').textContent = formatRentangJadwal(tglPinjam, jamPinjam, tglKembali, jamKembali);
+            document.getElementById('confTanggal').textContent = formatRentangJadwal(tanggalPinjam, jamPinjam, tanggalKembali, jamKembali);
 
             const confItemsEl = document.getElementById('confItems');
             confItemsEl.innerHTML = '';
@@ -1790,7 +2219,7 @@
                 const itemsText = pendingLoanDraft.items.map(i => `- ${i.nama} (${i.qty}x)`).join('<br>');
                 receiptBox.innerHTML = `
                     <p><strong>ID Tiket:</strong> ${pendingLoanDraft.idPinjam}</p>
-                    <p><strong>Diajukan:</strong> ${formatReadableDate(pendingLoanDraft.tanggalPengajuan)} (${pendingLoanDraft.jamPengajuan} WIB)</p>
+                    <p><strong>Tanggal Diajukan:</strong> ${formatReadableDate(pendingLoanDraft.tanggalPengajuan)} (${pendingLoanDraft.jamPengajuan} WIB)</p>
                     <p><strong>Peminjam:</strong> ${pendingLoanDraft.nama} (${pendingLoanDraft.nim})</p>
                     <p><strong>Jurusan:</strong> ${pendingLoanDraft.prodi}</p>
                     <p><strong>Jadwal:</strong> ${formatRentangJadwal(pendingLoanDraft.tanggalPinjam, pendingLoanDraft.jamPinjam, pendingLoanDraft.tanggalKembali, pendingLoanDraft.jamKembali)}</p>
@@ -1811,7 +2240,7 @@
             document.getElementById('buktiPinjamModal').classList.remove('flex');
         }
 
-        // ======= MODAL JADWAL ITEM =======
+        // ======= MODAL JADWAL ITEM & GLOBAL =======
         function openJadwalModal(idAlat) {
             const alat = dataAlatLab.find(a => a.ID_Alat === idAlat);
             if (!alat) return;
@@ -1862,6 +2291,65 @@
         function closeJadwalModal() {
             document.getElementById('jadwalModal').classList.add('hidden');
             document.getElementById('jadwalModal').classList.remove('flex');
+        }
+
+        function openGlobalScheduleModal() {
+            closeMobileSidebar();
+            renderGlobalScheduleList();
+            const modal = document.getElementById('globalScheduleModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function closeGlobalScheduleModal() {
+            const modal = document.getElementById('globalScheduleModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function renderGlobalScheduleList() {
+            const container = document.getElementById('globalScheduleListContainer');
+            if (!container) return;
+            const keyword = (document.getElementById('searchGlobalSchedule')?.value || '').toLowerCase();
+
+            const aktif = dataPeminjaman.filter(pj => {
+                if (pj.status !== 'Sedang Dipinjam' && pj.status !== 'Menunggu Konfirmasi') return false;
+                if (!keyword) return true;
+                const matchBorrower = (pj.nama || '').toLowerCase().includes(keyword) || (pj.prodi || '').toLowerCase().includes(keyword);
+                const matchItems = Array.isArray(pj.items) && pj.items.some(it => (it.nama || '').toLowerCase().includes(keyword));
+                return matchBorrower || matchItems;
+            });
+
+            if (aktif.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 text-gray-400">
+                        <i class="fas fa-calendar-check text-3xl mb-2 text-green-500"></i>
+                        <p class="text-xs">Belum ada jadwal penggunaan aktif yang tercatat.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = aktif.map(pj => {
+                const isAcc = pj.status === 'Sedang Dipinjam';
+                const itemsList = Array.isArray(pj.items) ? pj.items.map(i => `${i.nama} (${i.qty} unit)`).join(', ') : '-';
+                return `
+                    <div class="p-3.5 rounded-xl border ${isAcc ? 'bg-blue-50/50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800' : 'bg-amber-50/50 border-amber-200 dark:bg-amber-900/20 dark:border-amber-800'}">
+                        <div class="flex flex-wrap justify-between items-center gap-2 mb-1">
+                            <span class="text-xs font-bold text-gray-800 dark:text-white">${pj.nama} — <span class="text-blue-600 dark:text-blue-400">${pj.prodi || '-'}</span></span>
+                            <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full ${isAcc ? 'bg-blue-600 text-white' : 'bg-amber-500 text-white'}">${pj.status}</span>
+                        </div>
+                        <p class="text-xs font-semibold text-gray-700 dark:text-gray-200">
+                            <i class="fas fa-calendar-alt text-blue-500 mr-1"></i> ${formatRentangJadwal(pj.tanggalPinjam, pj.jamPinjam, pj.tanggalKembali, pj.jamKembali)}
+                        </p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1"><strong>Item:</strong> ${itemsList}</p>
+                    </div>
+                `;
+            }).join('');
         }
 
         // ======= LOGIN & PANEL PETUGAS =======
@@ -1951,16 +2439,59 @@
         }
 
         // ======= FUNGSI PENGATURAN SHEET & BACKUP DARURAT =======
+        function populateKodeGsTemplateBox() {
+            const box = document.getElementById('kodeGsTemplateBox');
+            if (!box) return;
+            box.value = `const DEFAULT_SHEET_ID = '${DEFAULT_SHEET_ID}';
+
+function doGet(e) {
+  try {
+    var params = (e && e.parameter) ? e.parameter : {};
+    var sheetId = params.sheetId || DEFAULT_SHEET_ID;
+    var result = getAllSheetData(sheetId);
+    return ContentService.createTextOutput(JSON.stringify(result))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ status: 'error', error: err.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function doPost(e) {
+  try {
+    var raw = (e && e.postData && e.postData.contents) ? e.postData.contents : '{}';
+    var payload = JSON.parse(raw);
+    var result = processAction(payload);
+    return ContentService.createTextOutput(JSON.stringify(result))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ status: 'error', error: err.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}`;
+        }
+
+        function copyKodeGsTemplate() {
+            const box = document.getElementById('kodeGsTemplateBox');
+            if (!box) return;
+            box.select();
+            document.execCommand('copy');
+            showToast('Kode backend Kode.gs berhasil disalin ke clipboard!', 'success');
+        }
+
         function loadSheetSettingsToForm() {
             const urlInput = document.getElementById('inputSettingScriptUrl');
             const idInput = document.getElementById('inputSettingSheetId');
             if (urlInput) urlInput.value = getActiveScriptUrl();
             if (idInput) idInput.value = getActiveSheetId();
+            populateKodeGsTemplateBox();
         }
 
         function saveSheetSettings() {
             const urlVal = (document.getElementById('inputSettingScriptUrl')?.value || '').trim();
-            const idVal = (document.getElementById('inputSettingSheetId')?.value || '').trim();
+            const rawIdVal = (document.getElementById('inputSettingSheetId')?.value || '').trim();
+            const matchId = rawIdVal.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+            const idVal = (matchId && matchId[1]) ? matchId[1] : rawIdVal;
 
             if (!urlVal || !idVal) {
                 showToast('URL Apps Script dan ID Google Sheet tidak boleh kosong!', 'error');
@@ -1969,15 +2500,17 @@
 
             localStorage.setItem(STORAGE_KEY_SCRIPT_URL, urlVal);
             localStorage.setItem(STORAGE_KEY_SHEET_ID, idVal);
+            loadSheetSettingsToForm();
             showToast('Konfigurasi Google Sheet berhasil disimpan!', 'success');
             testSheetConnection();
         }
 
         function resetSheetSettings() {
-            localStorage.removeItem(STORAGE_KEY_SCRIPT_URL);
-            localStorage.removeItem(STORAGE_KEY_SHEET_ID);
+            localStorage.setItem(STORAGE_KEY_SCRIPT_URL, DEFAULT_SCRIPT_URL);
+            localStorage.setItem(STORAGE_KEY_SHEET_ID, DEFAULT_SHEET_ID);
             loadSheetSettingsToForm();
             showToast('Pengaturan dikembalikan ke link Google Sheet default.', 'info');
+            testSheetConnection();
         }
 
         async function testSheetConnection() {
@@ -1990,34 +2523,35 @@
             try {
                 const scriptUrl = (document.getElementById('inputSettingScriptUrl')?.value || getActiveScriptUrl()).trim();
                 const sheetId = (document.getElementById('inputSettingSheetId')?.value || getActiveSheetId()).trim();
-                const resp = await fetch(`${scriptUrl}?action=get_all&sheetId=${encodeURIComponent(sheetId)}&t=${Date.now()}`);
-                const json = await resp.json();
+                const rawJson = await fetchCloudWithFallback(scriptUrl, sheetId);
+                const extracted = extractCloudPayload(rawJson);
 
-                if (json && !json.error) {
+                if (extracted) {
+                    const count = extracted.inventaris.length;
                     if (badge) {
                         badge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 shrink-0 w-fit';
-                        badge.innerHTML = `<i class="fas fa-check-circle mr-1"></i> Terhubung (${(json.inventaris || []).length} Item)`;
+                        badge.innerHTML = `<i class="fas fa-check-circle mr-1"></i> Terhubung (${count} Item)`;
                     }
-                    showToast('Koneksi ke Google Sheet berhasil & aktif!', 'success');
+                    showToast(`Koneksi berhasil! Ditemukan ${count} item di Google Sheet.`, 'success');
+                    await syncWithCloud(false);
                 } else {
-                    throw new Error(json.error || 'Sheet error');
+                    throw new Error('Respons tidak dikenali');
                 }
             } catch (err) {
                 if (badge) {
                     badge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 shrink-0 w-fit';
                     badge.innerHTML = '<i class="fas fa-times-circle mr-1"></i> Gagal Terhubung';
                 }
-                showToast('Gagal terhubung ke Sheet. Periksa URL /exec dan izin aksesnya.', 'error');
+                showToast('Gagal terhubung ke Sheet. Pastikan akses Web App di-set "Anyone".', 'error');
             }
         }
 
         async function forcePullFromSheet() {
-            await syncWithCloud();
+            await syncWithCloud(true);
             renderAdminPeminjaman();
             renderAdminStok();
             renderAdminJurusan();
             renderAdminKategori();
-            showToast('Data terbaru berhasil ditarik dari Google Sheet!', 'success');
         }
 
         async function forcePushToSheet() {
@@ -2046,6 +2580,13 @@
         }
 
         // ======= TABEL PEMINJAMAN & KONFIRMASI KEMBALI (PETUGAS) =======
+        function formatWaNumber(rawWa) {
+            if (!rawWa) return '';
+            let clean = String(rawWa).replace(/\D/g, '');
+            if (clean.startsWith('0')) clean = '62' + clean.slice(1);
+            return clean;
+        }
+
         function renderAdminPeminjaman() {
             const tbody = document.getElementById('tablePeminjamanBody');
             if (!tbody) return;
@@ -2064,6 +2605,8 @@
                     ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300'
                     : pj.status === 'Sedang Dipinjam'
                     ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
+                    : pj.status === 'Ditolak'
+                    ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
                     : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300';
 
                 const waktuAjuanHtml = pj.tanggalPengajuan
@@ -2091,17 +2634,24 @@
                        </div>`
                     : '';
 
+                const waLink = formatWaNumber(pj.wa)
+                    ? `<a href="https://api.whatsapp.com/send/?phone=${formatWaNumber(pj.wa)}&text=${encodeURIComponent('Halo ' + pj.nama + ', terkait peminjaman alat/studio Lab Fikomm (' + (pj.idPinjam || '') + ')...')}" target="_blank" class="px-2.5 py-1.5 bg-green-50 hover:bg-green-100 dark:bg-green-900/20 text-green-600 text-xs rounded-lg transition-colors inline-flex items-center" title="Hubungi via WhatsApp"><i class="fab fa-whatsapp"></i></a>`
+                    : '';
+
                 let actionButtons = '';
                 if (pj.status === 'Menunggu Konfirmasi') {
                     actionButtons = `
                         <button onclick="accPeminjaman(${idx})" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg shadow-sm transition-colors">
-                            <i class="fas fa-check mr-1"></i> ACC Pinjam
+                            <i class="fas fa-check mr-1"></i> Setujui / ACC
+                        </button>
+                        <button onclick="tolakPeminjaman(${idx})" class="px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 dark:bg-amber-900/20 text-amber-600 text-xs font-bold rounded-lg transition-colors" title="Tolak Pengajuan">
+                            Tolak
                         </button>
                     `;
                 } else if (pj.status === 'Sedang Dipinjam') {
                     actionButtons = `
                         <button onclick="openReturnModal(${idx})" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-bold rounded-lg shadow-sm transition-colors">
-                            <i class="fas fa-undo mr-1"></i> Tandai Kembali
+                            <i class="fas fa-undo mr-1"></i> Selesai / Kembali
                         </button>
                     `;
                 }
@@ -2131,6 +2681,7 @@
                         </td>
                         <td class="py-3 px-4 align-top text-right space-x-1 whitespace-nowrap">
                             ${actionButtons}
+                            ${waLink}
                             <button onclick="hapusPeminjaman(${idx})" class="px-2.5 py-1.5 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 text-red-600 text-xs rounded-lg transition-colors" title="Hapus Data">
                                 <i class="fas fa-trash"></i>
                             </button>
@@ -2152,7 +2703,6 @@
             const startMs = parseDateTimeMs(pj.tanggalPinjam, pj.jamPinjam, false);
             const endMs = parseDateTimeMs(pj.tanggalKembali || pj.tanggalPinjam, pj.jamKembali, true);
 
-            // Validasi agar tidak double booking dengan yang sudah di-ACC lainnya
             for (const item of (pj.items || [])) {
                 const maxUnit = getMaxStokAlat(item.id);
                 let used = 0;
@@ -2167,7 +2717,7 @@
                     }
                 });
                 if (item.qty > (maxUnit - used)) {
-                    showToast(`Gagal ACC! ${item.nama} sudah penuh di jadwal tersebut.`, 'error');
+                    showToast(`Gagal ACC! ${item.nama} sudah penuh di tanggal dan jadwal tersebut.`, 'error');
                     return;
                 }
             }
@@ -2185,7 +2735,17 @@
             renderAdminPeminjaman();
             renderAdminStok();
             renderKatalog();
-            showToast(`Peminjaman ${pj.nama} berhasil di-ACC!`, 'success');
+            showToast(`Peminjaman ${pj.nama} berhasil disetujui (ACC)!`, 'success');
+        }
+
+        function tolakPeminjaman(idx) {
+            const pj = dataPeminjaman[idx];
+            if (!pj) return;
+            pj.status = 'Ditolak';
+            saveDataLocally();
+            pushToCloud();
+            renderAdminPeminjaman();
+            showToast(`Pengajuan peminjaman ${pj.nama} ditolak.`, 'info');
         }
 
         function openReturnModal(idx) {
@@ -2207,10 +2767,10 @@
                             <p class="text-[10px] text-gray-500">Jumlah: ${it.qty} Unit</p>
                         </div>
                         <select id="returnCond_${itemIdx}" class="text-xs border border-gray-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white rounded-lg px-2.5 py-1.5 font-semibold">
-                            <option value="Baik">Kondisi: Baik</option>
+                            <option value="Baik">Kondisi: Baik (Tersedia)</option>
                             <option value="Kurang Baik">Kondisi: Kurang Baik</option>
                             <option value="Digunakan Kegiatan Fakultas">Kondisi: Digunakan Kegiatan Fakultas</option>
-                            <option value="Rusak">Kondisi: Rusak</option>
+                            <option value="Rusak">Kondisi: Rusak / Maintenance</option>
                         </select>
                     </div>
                 `;
@@ -2318,10 +2878,11 @@
                         </td>
                         <td class="py-3 px-4 text-center">
                             <select onchange="ubahKondisiAdmin(${idx}, this.value)" class="text-xs border border-gray-300 dark:border-slate-600 dark:bg-slate-700 rounded-lg px-2 py-1">
-                                <option value="Baik" ${alat.Kondisi === 'Baik' ? 'selected' : ''}>Baik</option>
-                                <option value="Kurang Baik" ${alat.Kondisi === 'Kurang Baik' ? 'selected' : ''}>Kurang Baik</option>
+                                <option value="Baik" ${alat.Kondisi === 'Baik' || alat.Kondisi === 'Tersedia' ? 'selected' : ''}>Tersedia (Baik)</option>
+                                <option value="Dipinjam" ${alat.Kondisi === 'Dipinjam' ? 'selected' : ''}>Dipinjam</option>
                                 <option value="Digunakan Kegiatan Fakultas" ${alat.Kondisi === 'Digunakan Kegiatan Fakultas' ? 'selected' : ''}>Digunakan Kegiatan Fakultas</option>
-                                <option value="Rusak" ${alat.Kondisi === 'Rusak' ? 'selected' : ''}>Rusak</option>
+                                <option value="Kurang Baik" ${alat.Kondisi === 'Kurang Baik' ? 'selected' : ''}>Kurang Baik</option>
+                                <option value="Rusak" ${alat.Kondisi === 'Rusak' || alat.Kondisi === 'Maintenance' ? 'selected' : ''}>Maintenance / Rusak</option>
                             </select>
                         </td>
                         <td class="py-3 px-4 text-center">
