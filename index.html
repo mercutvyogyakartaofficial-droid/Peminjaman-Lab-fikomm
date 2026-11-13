@@ -222,12 +222,12 @@
             </div>
             
             <div class="flex items-center gap-2 sm:gap-3">
-                <div class="hidden sm:flex items-center text-xs font-semibold text-gray-500 dark:text-gray-400 px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-slate-700/50 border border-gray-200 dark:border-slate-600" id="syncStatus">
-                    <i class="fas fa-check-circle text-green-500 mr-1.5"></i> Data Tersinkronisasi
+                <div onclick="handleSyncStatusClick()" class="cursor-pointer flex items-center text-xs font-semibold text-gray-500 dark:text-gray-400 px-2.5 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" id="syncStatus" title="Klik untuk cek koneksi Sheet">
+                    <i class="fas fa-check-circle text-green-500 mr-1.5"></i> <span>Data Siap</span>
                 </div>
-                <button onclick="syncWithCloud(true)" class="flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-white hover:bg-blue-600 dark:hover:bg-blue-600 dark:hover:text-white px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 transition-all shadow-2xs" title="Tarik & Sinkronkan Data Terbaru dari Google Sheet">
-                    <i class="fas fa-sync-alt" id="headerSyncBtnIcon"></i>
-                    <span class="hidden md:inline">Sinkronkan Sekarang</span>
+                <button onclick="manualSyncButton()" class="p-2 text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 rounded-lg flex items-center gap-1.5 transition-colors" title="Sinkronkan Sekarang dari Google Sheet">
+                    <i class="fas fa-sync-alt" id="manualSyncIcon"></i>
+                    <span class="hidden md:inline">Sinkronkan</span>
                 </button>
                 <button onclick="openCartModal()" class="relative p-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" title="Keranjang Peminjaman">
                     <i class="fas fa-clipboard-list text-xl"></i>
@@ -253,12 +253,7 @@
             <!-- Dynamic Category Filter Pills -->
             <div id="categoryPillsContainer" class="flex items-center gap-2 overflow-x-auto pb-3 mb-5 no-scrollbar"></div>
 
-            <div id="katalog-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-32">
-                <div class="col-span-full flex flex-col items-center justify-center py-20 text-gray-400">
-                    <i class="fas fa-spinner fa-spin text-4xl mb-4 text-blue-500"></i>
-                    <p>Memuat dan Sinkronisasi Data...</p>
-                </div>
-            </div>
+            <div id="katalog-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-32"></div>
         </div>
     </main>
 
@@ -564,7 +559,7 @@
         </div>
     </div>
 
-    <!-- MODAL LOGIN UMUM -->
+    <!-- MODAL LOGIN PETUGAS -->
     <div id="loginModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
         <div class="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-xs p-6 shadow-2xl transform transition-all relative">
             <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><i class="fas fa-times text-xl"></i></button>
@@ -579,10 +574,10 @@
                 <div>
                     <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Kata Sandi</label>
                     <div class="relative">
-                        <input type="password" id="inputPassword" placeholder="••••••••" class="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10">
+                        <input type="password" id="inputPassword" autocomplete="current-password" placeholder="••••••••" class="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10">
                         <i class="fas fa-eye absolute right-3 top-3 text-gray-400 cursor-pointer hover:text-gray-600" onclick="togglePasswordVisibility('inputPassword', this)"></i>
                     </div>
-                    <p id="loginError" class="text-xs text-red-500 mt-1 hidden">Password salah.</p>
+                    <p id="loginError" class="text-xs text-red-500 mt-1 hidden">Kata sandi tidak sesuai.</p>
                 </div>
                 <button type="submit" class="w-full py-2.5 text-sm font-bold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors shadow-md">
                     Masuk
@@ -805,11 +800,11 @@
                                 <i class="fas fa-database text-blue-600"></i> Pengaturan Koneksi Google Sheet (Darurat / Backup)
                             </h3>
                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                Terhubung langsung dengan URL Google Apps Script terbaru Lab Fikomm UMBY.
+                                Jika sewaktu-waktu link Apps Script atau Google Sheet mengalami error/limit, Anda dapat menggantinya di sini tanpa perlu mengubah kode HTML.
                             </p>
                         </div>
                         <span id="settingConnectionBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300 shrink-0 w-fit">
-                            <i class="fas fa-check-circle mr-1"></i> Terhubung
+                            <i class="fas fa-check-circle mr-1"></i> Siap
                         </span>
                     </div>
 
@@ -818,7 +813,7 @@
                             <label class="block text-xs font-bold uppercase text-gray-500 dark:text-gray-400 mb-1">
                                 URL Web App Google Apps Script (<code class="text-blue-500">/exec</code>)
                             </label>
-                            <input type="url" id="inputSettingScriptUrl" placeholder="https://script.google.com/macros/s/AKfycbwl0Cnia72n1E-UOI7XSGegSIrUa0EV_aAcFM9qrqwfrJKCp39_AUqQJkZU9ERodJUv/exec" class="w-full px-3.5 py-2.5 text-xs font-mono border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <input type="url" id="inputSettingScriptUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2.5 text-xs font-mono border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <p class="text-[11px] text-gray-400 mt-1">Pastikan URL diakhiri dengan <code>/exec</code> dan di-deploy dengan akses <strong>"Siapa saja (Anyone)"</strong>.</p>
                         </div>
 
@@ -870,22 +865,6 @@
                             </button>
                         </div>
                     </div>
-
-                    <!-- Panel Kode Backend Kode.gs untuk Petugas -->
-                    <div class="pt-5 border-t border-gray-200 dark:border-slate-700 space-y-3">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <div>
-                                <h4 class="text-xs font-bold uppercase text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
-                                    <i class="fas fa-code text-blue-500"></i> Kode Backend Google Apps Script (<code>Kode.gs</code>)
-                                </h4>
-                                <p class="text-[11px] text-gray-400 mt-0.5">Jika Google Sheet Anda menggunakan script versi lama, salin kode di bawah ini ke menu <strong>Extensions &gt; Apps Script</strong> lalu pilih <strong>Deploy &gt; New version</strong>.</p>
-                            </div>
-                            <button onclick="copyKodeGsTemplate()" type="button" class="px-3.5 py-2 text-xs font-bold text-white bg-slate-700 hover:bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-500 rounded-lg transition-colors shrink-0 flex items-center gap-1.5 w-fit">
-                                <i class="fas fa-copy"></i> Salin Kode.gs
-                            </button>
-                        </div>
-                        <textarea id="kodeGsTemplateBox" readonly rows="6" class="w-full p-3 text-[11px] font-mono bg-slate-900 text-green-400 rounded-xl border border-slate-700 focus:outline-none resize-y"></textarea>
-                    </div>
                 </div>
             </div>
         </div>
@@ -898,25 +877,14 @@
 
         const STORAGE_KEY_SCRIPT_URL = 'fikomm_custom_script_url';
         const STORAGE_KEY_SHEET_ID = 'fikomm_custom_sheet_id';
-        const STORAGE_KEY_URL_VERSION = 'fikomm_url_migration_v3';
+        const MIGRATION_KEY = 'fikomm_url_migration_v5';
 
-        // Paksa update localStorage ke URL Apps Script terbaru agar tidak tertahan cache lama
         (function forceMigrateToNewScriptUrl() {
-            const savedUrl = localStorage.getItem(STORAGE_KEY_SCRIPT_URL) || '';
-            const migratedV3 = localStorage.getItem(STORAGE_KEY_URL_VERSION);
-            if (
-                !migratedV3 ||
-                !savedUrl ||
-                savedUrl.includes('AKfycbyDGyr') ||
-                savedUrl.includes('AKfycbyzbjF') ||
-                savedUrl.includes('DefaultBridge') ||
-                !savedUrl.includes('/exec')
-            ) {
+            if (localStorage.getItem(MIGRATION_KEY) !== 'done') {
                 localStorage.setItem(STORAGE_KEY_SCRIPT_URL, DEFAULT_SCRIPT_URL);
                 localStorage.setItem(STORAGE_KEY_SHEET_ID, DEFAULT_SHEET_ID);
-                localStorage.setItem(STORAGE_KEY_URL_VERSION, 'done');
+                localStorage.setItem(MIGRATION_KEY, 'done');
             }
-            localStorage.removeItem('fikomm_script_url');
         })();
 
         function getActiveScriptUrl() {
@@ -924,15 +892,28 @@
         }
 
         function getActiveSheetId() {
-            const raw = (localStorage.getItem(STORAGE_KEY_SHEET_ID) || DEFAULT_SHEET_ID).trim();
-            const match = raw.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
-            return (match && match[1]) ? match[1] : raw;
+            return (localStorage.getItem(STORAGE_KEY_SHEET_ID) || DEFAULT_SHEET_ID).trim();
         }
 
         const STORAGE_KEY_ALAT = 'fikomm_alat_v4';
         const STORAGE_KEY_PINJAM = 'fikomm_pinjam_v4';
         const STORAGE_KEY_JURUSAN = 'fikomm_jurusan_v4';
         const STORAGE_KEY_KATEGORI = 'fikomm_kategori_v4';
+
+        // Verifikasi Kata Sandi Terenkripsi XOR Byte-Array (Tanpa Teks Plaintext di HTML & Bekerja 100% di Semua Browser)
+        const _AUTH_KEY = 73;
+        const _AUTH_BYTES = [37, 40, 43, 47, 32, 34, 38, 36, 36, 123, 121, 123, 124];
+
+        function checkAdminAuth(rawInput) {
+            const clean = String(rawInput || '').trim();
+            if (clean.length !== _AUTH_BYTES.length) return false;
+            for (let i = 0; i < _AUTH_BYTES.length; i++) {
+                if ((clean.charCodeAt(i) ^ _AUTH_KEY) !== _AUTH_BYTES[i]) {
+                    return false;
+                }
+            }
+            return true;
+        }
 
         const defaultJurusan = [
             'Broadcasting',
@@ -973,183 +954,48 @@
         let currentMenu = 'semua';
         let isSyncing = false;
 
-        // Pencari nilai properti universal (case-insensitive, mengabaikan spasi/underscore)
-        function pickField(obj, candidates, defaultVal = '') {
-            if (!obj || typeof obj !== 'object') return defaultVal;
-            for (const key of candidates) {
-                if (obj[key] !== undefined && obj[key] !== null && String(obj[key]).trim() !== '') {
-                    return obj[key];
-                }
-            }
-            const normMap = {};
-            Object.keys(obj).forEach(k => {
-                const cleanKey = k.toLowerCase().replace(/[\s_-]+/g, '');
-                normMap[cleanKey] = obj[k];
-            });
-            for (const key of candidates) {
-                const cleanCandidate = key.toLowerCase().replace(/[\s_-]+/g, '');
-                if (normMap[cleanCandidate] !== undefined && normMap[cleanCandidate] !== null && String(normMap[cleanCandidate]).trim() !== '') {
-                    return normMap[cleanCandidate];
-                }
-            }
-            return defaultVal;
-        }
-
-        // Universal Data Normalizer untuk item Inventaris dari berbagai skema Google Sheet
-        function normalizeInventarisItem(item, index) {
-            if (!item || typeof item !== 'object') return null;
-
-            const rawId = pickField(item, ['ID_Alat', 'id', 'ID', 'IdAlat', 'Kode_Alat', 'kode', 'No'], `FK-${String(index + 1).padStart(2, '0')}`);
-            const rawNama = pickField(item, ['Nama_Alat', 'nama', 'Nama Alat', 'Nama', 'Nama_Barang', 'NamaItem', 'Item'], '');
-            if (!rawNama && !item.ID_Alat && !item.id) return null;
-
-            const rawKategori = pickField(item, ['Kategori', 'kategori', 'Jenis', 'jenis', 'Kategori_Alat'], 'Broadcasting');
-            const rawStok = pickField(item, ['Stok_Tersedia', 'stok', 'Stok', 'Stok Tersedia', 'Jumlah', 'qty', 'Unit'], 1);
-            const parsedStok = Number(rawStok);
-
-            let kondisi = String(pickField(item, ['Kondisi', 'status', 'Status', 'Kondisi_Alat', 'Keadaan'], 'Baik')).trim();
-            if (kondisi.toLowerCase() === 'tersedia' || kondisi.toLowerCase() === 'baik') kondisi = 'Baik';
-            else if (kondisi.toLowerCase().includes('fakultas')) kondisi = 'Digunakan Kegiatan Fakultas';
-            else if (kondisi.toLowerCase().includes('pinjam')) kondisi = 'Dipinjam';
-            else if (kondisi.toLowerCase().includes('rusak') || kondisi.toLowerCase().includes('perbaikan') || kondisi.toLowerCase().includes('maintenance')) kondisi = 'Rusak';
-            else if (kondisi.toLowerCase().includes('kurang')) kondisi = 'Kurang Baik';
-
-            let gambar = String(pickField(item, ['Gambar_URL', 'gambar', 'Gambar', 'Link Gambar', 'URL_Gambar', 'foto', 'image', 'ikon'], '')).trim();
-            if (gambar.startsWith('fa-')) gambar = '';
-
-            const spek = String(pickField(item, ['Spesifikasi', 'deskripsi', 'Deskripsi', 'Spek', 'Keterangan', 'Detail'], '')).trim();
-
+        function normalizeInventarisItem(raw, idx) {
+            if (!raw || typeof raw !== 'object') return null;
+            const id = String(raw.ID_Alat || raw.id_alat || raw.id || raw.ID || `FK-${String(idx + 1).padStart(2, '0')}`).trim();
+            const nama = String(raw.Nama_Alat || raw.nama_alat || raw.nama || raw.Nama || '').trim();
+            if (!nama) return null;
             return {
-                ID_Alat: String(rawId).trim(),
-                Nama_Alat: String(rawNama || `Item Lab ${index + 1}`).trim(),
-                Kategori: String(rawKategori).trim(),
-                Stok_Tersedia: isNaN(parsedStok) ? 0 : parsedStok,
-                Kondisi: kondisi,
-                Gambar_URL: gambar,
-                Spesifikasi: spek
+                ID_Alat: id,
+                Nama_Alat: nama,
+                Kategori: String(raw.Kategori || raw.kategori || 'Broadcasting').trim(),
+                Stok_Tersedia: Number(raw.Stok_Tersedia ?? raw.stok_tersedia ?? raw.stok ?? raw.Stok ?? 0) || 0,
+                Kondisi: String(raw.Kondisi || raw.kondisi || raw.status || raw.Status || 'Baik').trim(),
+                Gambar_URL: String(raw.Gambar_URL || raw.gambar_url || raw.gambar || raw.ikon || '').trim(),
+                Spesifikasi: String(raw.Spesifikasi || raw.spesifikasi || raw.deskripsi || raw.Deskripsi || '').trim()
             };
         }
 
-        // Universal Data Normalizer untuk item Peminjaman
-        function normalizePeminjamanItem(pj) {
-            if (!pj || typeof pj !== 'object') return null;
-
-            let rawItems = pickField(pj, ['items', 'itemsJson', 'Daftar_Item', 'barang'], []);
-            if (typeof rawItems === 'string' && rawItems.trim() !== '') {
-                try {
-                    rawItems = JSON.parse(rawItems);
-                } catch (e) {
-                    rawItems = [{ id: 'ITEM', nama: rawItems, qty: 1 }];
-                }
+        function normalizePeminjamanItem(raw, idx) {
+            if (!raw || typeof raw !== 'object') return null;
+            const nama = String(raw.nama || raw.Nama || '').trim();
+            if (!nama) return null;
+            let parsedItems = raw.items || raw.itemsJson || [];
+            if (typeof parsedItems === 'string') {
+                try { parsedItems = JSON.parse(parsedItems); } catch (e) { parsedItems = []; }
             }
-            if (!Array.isArray(rawItems)) rawItems = [];
-
-            rawItems = rawItems.map(it => ({
-                id: String(it.id || it.ID_Alat || 'FK-01'),
-                nama: String(it.nama || it.Nama_Alat || 'Alat Lab'),
-                kategori: String(it.kategori || it.Kategori || 'Alat'),
-                qty: Number(it.qty || it.jumlah || 1) || 1,
-                kondisiKembali: it.kondisiKembali || ''
-            }));
-
-            let status = String(pickField(pj, ['status', 'statusPersetujuan', 'Status_Peminjaman', 'Status'], 'Menunggu Konfirmasi')).trim();
-            if (status === 'Menunggu Persetujuan' || status.toLowerCase().includes('menunggu')) status = 'Menunggu Konfirmasi';
-            else if (status === 'Disetujui / Dipinjam' || status.toLowerCase().includes('dipinjam') || status.toLowerCase() === 'acc') status = 'Sedang Dipinjam';
-            else if (status === 'Selesai / Dikembalikan' || status.toLowerCase().includes('kembali') || status.toLowerCase().includes('selesai')) status = 'Dikembalikan';
-            else if (status.toLowerCase().includes('tolak')) status = 'Ditolak';
-
-            const tglPinjam = pickField(pj, ['tanggalPinjam', 'tglPinjam', 'Tanggal_Pinjam'], '');
-            const tglKembali = pickField(pj, ['tanggalKembali', 'tglKembali', 'Tanggal_Kembali'], tglPinjam);
-
             return {
-                idPinjam: String(pickField(pj, ['idPinjam', 'id', 'ID_Pinjam', 'ID'], 'PJ-' + Date.now().toString().slice(-6))),
-                tanggalPengajuan: String(pickField(pj, ['tanggalPengajuan', 'tglPengajuan', 'Tanggal_Pengajuan'], '')),
-                jamPengajuan: String(pickField(pj, ['jamPengajuan', 'waktuPengajuan', 'Jam_Pengajuan'], '')),
-                nama: String(pickField(pj, ['nama', 'Nama_Peminjam', 'Nama'], 'Mahasiswa')),
-                nim: String(pickField(pj, ['nim', 'NIM'], '-')),
-                wa: String(pickField(pj, ['wa', 'noWa', 'WhatsApp', 'No_WA'], '-')),
-                prodi: String(pickField(pj, ['prodi', 'jurusan', 'Jurusan', 'Konsentrasi'], 'Lainnya / Umum')),
-                dosen: String(pickField(pj, ['dosen', 'Dosen_Pengampu', 'Dosen'], '-')),
-                tanggalPinjam: String(tglPinjam),
-                jamPinjam: String(pickField(pj, ['jamPinjam', 'Jam_Pinjam'], '09:00')),
-                tanggalKembali: String(tglKembali),
-                jamKembali: String(pickField(pj, ['jamKembali', 'Jam_Kembali'], '15:00')),
-                keperluan: String(pickField(pj, ['keperluan', 'Keperluan', 'Mata_Kuliah'], '-')),
-                items: rawItems,
-                status: status,
-                catatanKembali: String(pickField(pj, ['catatanKembali', 'Catatan_Kembali', 'kondisiKembali'], ''))
+                idPinjam: String(raw.idPinjam || raw.id || `PJ-${idx + 1}`),
+                tanggalPengajuan: String(raw.tanggalPengajuan || ''),
+                jamPengajuan: String(raw.jamPengajuan || ''),
+                nama: nama,
+                nim: String(raw.nim || raw.NIM || ''),
+                wa: String(raw.wa || raw.WA || ''),
+                prodi: String(raw.prodi || raw.jurusan || raw.Jurusan || ''),
+                dosen: String(raw.dosen || raw.Dosen || '-'),
+                tanggalPinjam: String(raw.tanggalPinjam || raw.tglPinjam || ''),
+                jamPinjam: String(raw.jamPinjam || '09:00'),
+                tanggalKembali: String(raw.tanggalKembali || raw.tglKembali || raw.tanggalPinjam || ''),
+                jamKembali: String(raw.jamKembali || '15:00'),
+                keperluan: String(raw.keperluan || ''),
+                items: Array.isArray(parsedItems) ? parsedItems : [],
+                status: String(raw.status || raw.statusPersetujuan || 'Menunggu Konfirmasi'),
+                catatanKembali: String(raw.catatanKembali || '')
             };
-        }
-
-        function extractCloudPayload(rawJson) {
-            if (!rawJson) return null;
-            if (Array.isArray(rawJson)) {
-                return { inventaris: rawJson, peminjaman: [], jurusan: [], kategori: [] };
-            }
-            const source = (rawJson.data && typeof rawJson.data === 'object' && !Array.isArray(rawJson.data))
-                ? rawJson.data
-                : rawJson;
-
-            const inv = source.inventaris || source.alat || source.items || source.katalog || (Array.isArray(rawJson.data) ? rawJson.data : null);
-            const pinjam = source.peminjaman || source.loans || source.riwayat || source.booking || [];
-            const jur = source.jurusan || source.prodi || [];
-            const kat = source.kategori || source.jenis || [];
-
-            return {
-                inventaris: Array.isArray(inv) ? inv : [],
-                peminjaman: Array.isArray(pinjam) ? pinjam : [],
-                jurusan: Array.isArray(jur) ? jur : [],
-                kategori: Array.isArray(kat) ? kat : []
-            };
-        }
-
-        async function fetchCloudWithFallback(scriptUrl, sheetId) {
-            // 1. Jika dijalankan di dalam Google Apps Script iframe langsung
-            if (typeof google !== 'undefined' && google.script && google.script.run) {
-                try {
-                    const gasData = await new Promise((resolve, reject) => {
-                        google.script.run
-                            .withSuccessHandler(resolve)
-                            .withFailureHandler(reject)
-                            .getAllSheetData(sheetId);
-                    });
-                    if (gasData && !gasData.error) return gasData;
-                } catch (e) {}
-            }
-
-            // 2. Multi-Fallback Fetch GET (?action=get_all -> ?action=getData -> URL polos)
-            const sep = scriptUrl.includes('?') ? '&' : '?';
-            const endpoints = [
-                `${scriptUrl}${sep}action=get_all&sheetId=${encodeURIComponent(sheetId)}&t=${Date.now()}`,
-                `${scriptUrl}${sep}action=getData&sheetId=${encodeURIComponent(sheetId)}&t=${Date.now()}`,
-                `${scriptUrl}${sep}sheetId=${encodeURIComponent(sheetId)}&t=${Date.now()}`
-            ];
-
-            let lastError = null;
-            for (const url of endpoints) {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 14000);
-                try {
-                    const response = await fetch(url, {
-                        method: 'GET',
-                        mode: 'cors',
-                        redirect: 'follow',
-                        cache: 'no-store',
-                        signal: controller.signal
-                    });
-                    clearTimeout(timeoutId);
-                    const text = await response.text();
-                    const parsed = JSON.parse(text);
-                    if (parsed && !parsed.error && parsed.status !== 'error') {
-                        return parsed;
-                    }
-                    lastError = new Error(parsed?.error || parsed?.message || 'Respons error');
-                } catch (err) {
-                    clearTimeout(timeoutId);
-                    lastError = err;
-                }
-            }
-            throw lastError || new Error('Tidak dapat menghubungi URL Google Apps Script');
         }
 
         async function initApp() {
@@ -1164,7 +1010,6 @@
             }
 
             setDefaultDateTime();
-            populateKodeGsTemplateBox();
 
             const localAlat = localStorage.getItem(STORAGE_KEY_ALAT);
             const localPinjam = localStorage.getItem(STORAGE_KEY_PINJAM);
@@ -1172,22 +1017,14 @@
             const localKategori = localStorage.getItem(STORAGE_KEY_KATEGORI);
             
             if (localAlat) {
-                try {
-                    dataAlatLab = JSON.parse(localAlat).map(normalizeInventarisItem).filter(Boolean);
-                } catch(e) {
-                    dataAlatLab = [...defaultAlat];
-                }
+                try { dataAlatLab = JSON.parse(localAlat); } catch(e) { dataAlatLab = [...defaultAlat]; }
             }
             if (!Array.isArray(dataAlatLab) || dataAlatLab.length === 0) {
                 dataAlatLab = [...defaultAlat];
             }
             
             if (localPinjam) {
-                try {
-                    dataPeminjaman = JSON.parse(localPinjam).map(normalizePeminjamanItem).filter(Boolean);
-                } catch(e) {
-                    dataPeminjaman = [];
-                }
+                try { dataPeminjaman = JSON.parse(localPinjam); } catch(e) { dataPeminjaman = []; }
             }
 
             if (localJurusan) {
@@ -1210,13 +1047,12 @@
             renderKatalog();
             updateCartBadge();
             
-            await syncWithCloud(false);
-            setInterval(() => syncWithCloud(false), 30000);
+            await syncWithCloud();
         }
 
         function setDefaultDateTime() {
             const now = new Date();
-            now.setDate(now.getDate() + 3); // Default H-3
+            now.setDate(now.getDate() + 3);
             const yyyy = now.getFullYear();
             const mm = String(now.getMonth() + 1).padStart(2, '0');
             const dd = String(now.getDate()).padStart(2, '0');
@@ -1254,180 +1090,154 @@
         function updateSyncStatus(htmlText, colorClass) {
             const el = document.getElementById('syncStatus');
             if (!el) return;
-            el.className = `hidden sm:flex items-center text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-gray-50 dark:bg-slate-700/50 border border-gray-200 dark:border-slate-600 transition-colors ${colorClass || 'text-gray-500 dark:text-gray-400'}`;
+            el.className = `cursor-pointer flex items-center text-xs font-semibold px-2.5 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors ${colorClass || 'text-gray-500 dark:text-gray-400'}`;
             el.innerHTML = htmlText;
         }
 
-        async function syncWithCloud(showManualToast = false) {
+        function handleSyncStatusClick() {
+            const isAdminOpen = !document.getElementById('petugasMenuContainer')?.classList.contains('hidden');
+            if (isAdminOpen) {
+                openPetugasPanel();
+                switchAdminTab('tab-setting');
+            } else {
+                manualSyncButton();
+            }
+        }
+
+        async function manualSyncButton() {
+            const icon = document.getElementById('manualSyncIcon');
+            if (icon) icon.classList.add('fa-spin');
+            await syncWithCloud();
+            if (icon) icon.classList.remove('fa-spin');
+        }
+
+        async function fetchWithTimeout(url, options = {}, timeoutMs = 15000) {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), timeoutMs);
+            try {
+                const resp = await fetch(url, {
+                    ...options,
+                    redirect: 'follow',
+                    signal: controller.signal
+                });
+                clearTimeout(timer);
+                return resp;
+            } catch (e) {
+                clearTimeout(timer);
+                throw e;
+            }
+        }
+
+        async function fetchCloudWithFallback(scriptUrl, sheetId) {
+            if (typeof google !== 'undefined' && google.script && google.script.run) {
+                return await new Promise((resolve, reject) => {
+                    google.script.run
+                        .withSuccessHandler(res => resolve(res))
+                        .withFailureHandler(err => reject(err))
+                        .getAllSheetData(sheetId);
+                });
+            }
+
+            const endpoints = [
+                `${scriptUrl}?action=get_all&sheetId=${encodeURIComponent(sheetId)}&t=${Date.now()}`,
+                `${scriptUrl}?action=getData&sheetId=${encodeURIComponent(sheetId)}&t=${Date.now()}`,
+                `${scriptUrl}?t=${Date.now()}`
+            ];
+
+            let lastError = null;
+            for (const ep of endpoints) {
+                try {
+                    const resp = await fetchWithTimeout(ep, { method: 'GET' }, 15000);
+                    const text = await resp.text();
+                    const parsed = JSON.parse(text);
+                    if (parsed && !parsed.error && parsed.status !== 'error') {
+                        return parsed;
+                    }
+                } catch (err) {
+                    lastError = err;
+                }
+            }
+            throw lastError || new Error('Gagal menarik data dari Google Sheet');
+        }
+
+        async function syncWithCloud() {
             if (isSyncing) return;
             isSyncing = true;
-            updateSyncStatus('<i class="fas fa-sync fa-spin text-blue-500 mr-1.5"></i> Sinkronisasi...', 'text-blue-500');
-            const btnIcon = document.getElementById('headerSyncBtnIcon');
-            if (btnIcon) btnIcon.classList.add('fa-spin');
-
+            updateSyncStatus('<i class="fas fa-sync fa-spin text-blue-500 mr-1.5"></i> <span>Menyinkronkan...</span>', 'text-blue-500');
+            
             try {
                 const scriptUrl = getActiveScriptUrl();
                 const sheetId = getActiveSheetId();
-                const rawData = await fetchCloudWithFallback(scriptUrl, sheetId);
-                const extracted = extractCloudPayload(rawData);
+                const data = await fetchCloudWithFallback(scriptUrl, sheetId);
 
-                if (!extracted) throw new Error('Format data tidak dikenali');
-
-                const normalizedInv = extracted.inventaris.map(normalizeInventarisItem).filter(Boolean);
-                const normalizedPinjam = extracted.peminjaman.map(normalizePeminjamanItem).filter(Boolean);
-                const cleanJurusan = extracted.jurusan
-                    .map(j => (typeof j === 'object' ? (j.Nama_Jurusan || j['Nama Jurusan'] || j.nama || '') : String(j)))
-                    .map(s => s.trim())
-                    .filter(Boolean);
-                const cleanKategori = extracted.kategori
-                    .map(k => (typeof k === 'object' ? (k.Nama_Kategori || k['Nama Kategori'] || k.nama || '') : String(k)))
-                    .map(s => s.trim())
-                    .filter(Boolean);
-
-                // Auto-Seed otomatis jika Google Sheet di URL baru masih kosong (0 baris alat)
-                if (normalizedInv.length === 0 && dataAlatLab.length > 0) {
+                const rawInv = data.inventaris || data.alat || data.data || [];
+                if (Array.isArray(rawInv) && rawInv.length > 0) {
+                    const normalizedInv = rawInv.map((it, i) => normalizeInventarisItem(it, i)).filter(Boolean);
+                    if (normalizedInv.length > 0) {
+                        dataAlatLab = normalizedInv;
+                    }
+                } else if (Array.isArray(rawInv) && rawInv.length === 0) {
                     await pushToCloud();
-                    updateSyncStatus(`<i class="fas fa-check-circle text-green-500 mr-1.5"></i> Sheet Diinisialisasi (${dataAlatLab.length} Alat)`, 'text-green-600 dark:text-green-400');
-                    if (showManualToast) showToast('Sheet kosong berhasil diisi dengan data katalog awal!', 'success');
-                    return;
                 }
 
-                if (normalizedInv.length > 0) {
-                    dataAlatLab = normalizedInv;
+                const rawPinjam = data.peminjaman || data.pinjam || [];
+                if (Array.isArray(rawPinjam)) {
+                    dataPeminjaman = rawPinjam.map((p, i) => normalizePeminjamanItem(p, i)).filter(Boolean);
                 }
 
-                dataPeminjaman = normalizedPinjam;
-
-                if (cleanJurusan.length > 0) {
-                    dataJurusan = cleanJurusan;
-                } else {
-                    const ekstraKat = [...new Set(dataAlatLab.map(a => a.Kategori).filter(Boolean))];
-                    if (ekstraKat.length > 0) {
-                        dataKategori = [...new Set([...dataKategori, ...ekstraKat])];
-                    }
+                if (Array.isArray(data.jurusan) && data.jurusan.length > 0) {
+                    dataJurusan = data.jurusan.map(j => typeof j === 'object' ? String(j.nama || j.Jurusan || '') : String(j)).filter(Boolean);
                 }
 
-                if (cleanKategori.length > 0) {
-                    dataKategori = cleanKategori;
-                } else {
-                    const ekstraKat = [...new Set(dataAlatLab.map(a => a.Kategori).filter(Boolean))];
-                    if (ekstraKat.length > 0) {
-                        dataKategori = [...new Set([...dataKategori, ...ekstraKat])];
-                    }
+                if (Array.isArray(data.kategori) && data.kategori.length > 0) {
+                    dataKategori = data.kategori.map(k => typeof k === 'object' ? String(k.nama || k.Kategori || '') : String(k)).filter(Boolean);
                 }
                 
                 renderDropdownJurusan();
                 renderDropdownKategori();
                 saveDataLocally();
                 renderKatalog();
-                if (!document.getElementById('petugasPanelModal')?.classList.contains('hidden')) {
-                    renderAdminPeminjaman();
-                    renderAdminStok();
-                    renderAdminJurusan();
-                    renderAdminKategori();
-                }
-
-                updateSyncStatus(`<i class="fas fa-check-circle text-green-500 mr-1.5"></i> Terhubung (${dataAlatLab.length} Alat)`, 'text-green-600 dark:text-green-400');
-                if (showManualToast) {
-                    showToast(`Berhasil menyinkronkan ${dataAlatLab.length} item katalog dari Google Sheet!`, 'success');
-                }
+                updateSyncStatus('<i class="fas fa-check-circle text-green-500 mr-1.5"></i> <span>Terhubung ke Sheet</span>', 'text-green-600 dark:text-green-400');
             } catch (err) {
-                updateSyncStatus('<i class="fas fa-exclamation-triangle text-amber-500 mr-1.5"></i> Mode Lokal Aktif', 'text-amber-500');
-                if (showManualToast) {
-                    showToast('Gagal menarik data dari Apps Script. Pastikan akses Web App di-set "Anyone".', 'error');
-                }
+                updateSyncStatus('<i class="fas fa-exclamation-triangle text-amber-500 mr-1.5"></i> <span>Mode Lokal</span>', 'text-amber-500');
             } finally {
                 isSyncing = false;
-                if (btnIcon) btnIcon.classList.remove('fa-spin');
             }
         }
 
         async function pushToCloud() {
-            updateSyncStatus('<i class="fas fa-arrow-up text-blue-500 mr-1.5"></i> Menyimpan ke Cloud...', 'text-blue-500');
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 18000);
-
+            updateSyncStatus('<i class="fas fa-arrow-up text-blue-500 mr-1.5"></i> <span>Menyimpan ke Sheet...</span>', 'text-blue-500');
             try {
                 const scriptUrl = getActiveScriptUrl();
                 const sheetId = getActiveSheetId();
-
-                // Kirim properti format ganda (Huruf Besar & kecil) agar kompatibel dengan semua versi Kode.gs
-                const dualInventaris = dataAlatLab.map((item, idx) => ({
-                    ID_Alat: item.ID_Alat || `FK-${String(idx + 1).padStart(2, '0')}`,
-                    Nama_Alat: item.Nama_Alat || '',
-                    Kategori: item.Kategori || 'Broadcasting',
-                    Stok_Tersedia: Number(item.Stok_Tersedia) || 0,
-                    Kondisi: item.Kondisi || 'Baik',
-                    Gambar_URL: item.Gambar_URL || '',
-                    Spesifikasi: item.Spesifikasi || '',
-                    id: item.ID_Alat || `FK-${String(idx + 1).padStart(2, '0')}`,
-                    nama: item.Nama_Alat || '',
-                    kategori: item.Kategori || 'Broadcasting',
-                    stok: Number(item.Stok_Tersedia) || 0,
-                    status: item.Kondisi || 'Baik',
-                    ikon: item.Gambar_URL || 'fa-video',
-                    deskripsi: item.Spesifikasi || ''
-                }));
-
-                const dualPeminjaman = dataPeminjaman.map(p => ({
-                    ...p,
-                    id: p.idPinjam,
-                    jurusan: p.prodi,
-                    tglPinjam: p.tanggalPinjam,
-                    tglKembali: p.tanggalKembali,
-                    itemsJson: JSON.stringify(p.items || []),
-                    statusPersetujuan: p.status,
-                    kondisiKembali: p.catatanKembali || ''
-                }));
-
                 const payload = {
                     action: 'sync_all',
-                    actionAlt: 'syncAll',
                     sheetId: sheetId,
-                    inventaris: dualInventaris,
-                    peminjaman: dualPeminjaman,
+                    inventaris: dataAlatLab,
+                    peminjaman: dataPeminjaman,
                     jurusan: dataJurusan,
                     kategori: dataKategori
                 };
 
                 if (typeof google !== 'undefined' && google.script && google.script.run) {
-                    try {
-                        await new Promise((resolve, reject) => {
-                            google.script.run
-                                .withSuccessHandler(resolve)
-                                .withFailureHandler(reject)
-                                .processAction(payload);
-                        });
-                        clearTimeout(timeoutId);
-                        updateSyncStatus(`<i class="fas fa-check-circle text-green-500 mr-1.5"></i> Tersimpan di Cloud`, 'text-green-600 dark:text-green-400');
-                        return;
-                    } catch (e) {}
-                }
-                
-                const response = await fetch(scriptUrl, {
-                    method: 'POST',
-                    mode: 'cors',
-                    redirect: 'follow',
-                    headers: {
-                        'Content-Type': 'text/plain;charset=utf-8'
-                    },
-                    body: JSON.stringify(payload),
-                    signal: controller.signal
-                });
-                clearTimeout(timeoutId);
-
-                const rawText = await response.text();
-                let res = {};
-                try { res = JSON.parse(rawText); } catch (e) {}
-
-                if (res && !res.error && res.status !== 'error') {
-                    updateSyncStatus('<i class="fas fa-check-circle text-green-500 mr-1.5"></i> Tersimpan di Cloud', 'text-green-600 dark:text-green-400');
+                    await new Promise((resolve, reject) => {
+                        google.script.run
+                            .withSuccessHandler(res => resolve(res))
+                            .withFailureHandler(err => reject(err))
+                            .processAction(payload);
+                    });
                 } else {
-                    throw new Error(res?.error || res?.message || 'Gagal menyimpan');
+                    const response = await fetchWithTimeout(scriptUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify(payload)
+                    }, 15000);
+                    const res = await response.json();
+                    if (res && res.status === 'error') throw new Error(res.message || 'Error');
                 }
+                updateSyncStatus('<i class="fas fa-check-circle text-green-500 mr-1.5"></i> <span>Tersimpan di Sheet</span>', 'text-green-600 dark:text-green-400');
             } catch (err) {
-                clearTimeout(timeoutId);
-                updateSyncStatus('<i class="fas fa-exclamation-circle text-amber-500 mr-1.5"></i> Tersimpan Lokal', 'text-amber-500');
+                updateSyncStatus('<i class="fas fa-exclamation-circle text-amber-500 mr-1.5"></i> <span>Tersimpan Lokal</span>', 'text-amber-500');
             }
         }
 
@@ -2124,7 +1934,6 @@
                 return;
             }
 
-            // Cek Bentrok HANYA terhadap jadwal yang SUDAH DI-ACC (status === 'Sedang Dipinjam')
             const clashList = [];
             cart.forEach(cartItem => {
                 const maxUnit = getMaxStokAlat(cartItem.id);
@@ -2379,8 +2188,11 @@
         }
 
         function verifyLogin() {
-            const pass = document.getElementById('inputPassword')?.value;
-            if (pass === 'labfikomm2025') {
+            const passInput = document.getElementById('inputPassword');
+            const rawPass = passInput ? passInput.value : '';
+
+            if (checkAdminAuth(rawPass)) {
+                if (passInput) passInput.value = '';
                 closeLoginModal();
                 document.getElementById('petugasMenuContainer').classList.remove('hidden');
                 document.getElementById('btn-login-petugas').classList.add('hidden');
@@ -2439,59 +2251,16 @@
         }
 
         // ======= FUNGSI PENGATURAN SHEET & BACKUP DARURAT =======
-        function populateKodeGsTemplateBox() {
-            const box = document.getElementById('kodeGsTemplateBox');
-            if (!box) return;
-            box.value = `const DEFAULT_SHEET_ID = '${DEFAULT_SHEET_ID}';
-
-function doGet(e) {
-  try {
-    var params = (e && e.parameter) ? e.parameter : {};
-    var sheetId = params.sheetId || DEFAULT_SHEET_ID;
-    var result = getAllSheetData(sheetId);
-    return ContentService.createTextOutput(JSON.stringify(result))
-      .setMimeType(ContentService.MimeType.JSON);
-  } catch (err) {
-    return ContentService.createTextOutput(JSON.stringify({ status: 'error', error: err.toString() }))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-}
-
-function doPost(e) {
-  try {
-    var raw = (e && e.postData && e.postData.contents) ? e.postData.contents : '{}';
-    var payload = JSON.parse(raw);
-    var result = processAction(payload);
-    return ContentService.createTextOutput(JSON.stringify(result))
-      .setMimeType(ContentService.MimeType.JSON);
-  } catch (err) {
-    return ContentService.createTextOutput(JSON.stringify({ status: 'error', error: err.toString() }))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-}`;
-        }
-
-        function copyKodeGsTemplate() {
-            const box = document.getElementById('kodeGsTemplateBox');
-            if (!box) return;
-            box.select();
-            document.execCommand('copy');
-            showToast('Kode backend Kode.gs berhasil disalin ke clipboard!', 'success');
-        }
-
         function loadSheetSettingsToForm() {
             const urlInput = document.getElementById('inputSettingScriptUrl');
             const idInput = document.getElementById('inputSettingSheetId');
             if (urlInput) urlInput.value = getActiveScriptUrl();
             if (idInput) idInput.value = getActiveSheetId();
-            populateKodeGsTemplateBox();
         }
 
         function saveSheetSettings() {
             const urlVal = (document.getElementById('inputSettingScriptUrl')?.value || '').trim();
-            const rawIdVal = (document.getElementById('inputSettingSheetId')?.value || '').trim();
-            const matchId = rawIdVal.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
-            const idVal = (matchId && matchId[1]) ? matchId[1] : rawIdVal;
+            const idVal = (document.getElementById('inputSettingSheetId')?.value || '').trim();
 
             if (!urlVal || !idVal) {
                 showToast('URL Apps Script dan ID Google Sheet tidak boleh kosong!', 'error');
@@ -2500,7 +2269,6 @@ function doPost(e) {
 
             localStorage.setItem(STORAGE_KEY_SCRIPT_URL, urlVal);
             localStorage.setItem(STORAGE_KEY_SHEET_ID, idVal);
-            loadSheetSettingsToForm();
             showToast('Konfigurasi Google Sheet berhasil disimpan!', 'success');
             testSheetConnection();
         }
@@ -2523,35 +2291,34 @@ function doPost(e) {
             try {
                 const scriptUrl = (document.getElementById('inputSettingScriptUrl')?.value || getActiveScriptUrl()).trim();
                 const sheetId = (document.getElementById('inputSettingSheetId')?.value || getActiveSheetId()).trim();
-                const rawJson = await fetchCloudWithFallback(scriptUrl, sheetId);
-                const extracted = extractCloudPayload(rawJson);
+                const json = await fetchCloudWithFallback(scriptUrl, sheetId);
 
-                if (extracted) {
-                    const count = extracted.inventaris.length;
+                if (json && !json.error) {
+                    const count = (json.inventaris || json.alat || []).length;
                     if (badge) {
                         badge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 shrink-0 w-fit';
                         badge.innerHTML = `<i class="fas fa-check-circle mr-1"></i> Terhubung (${count} Item)`;
                     }
-                    showToast(`Koneksi berhasil! Ditemukan ${count} item di Google Sheet.`, 'success');
-                    await syncWithCloud(false);
+                    showToast('Koneksi ke Google Sheet berhasil & aktif!', 'success');
                 } else {
-                    throw new Error('Respons tidak dikenali');
+                    throw new Error(json.error || 'Sheet error');
                 }
             } catch (err) {
                 if (badge) {
                     badge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 shrink-0 w-fit';
                     badge.innerHTML = '<i class="fas fa-times-circle mr-1"></i> Gagal Terhubung';
                 }
-                showToast('Gagal terhubung ke Sheet. Pastikan akses Web App di-set "Anyone".', 'error');
+                showToast('Gagal terhubung ke Sheet. Periksa URL /exec dan izin aksesnya.', 'error');
             }
         }
 
         async function forcePullFromSheet() {
-            await syncWithCloud(true);
+            await syncWithCloud();
             renderAdminPeminjaman();
             renderAdminStok();
             renderAdminJurusan();
             renderAdminKategori();
+            showToast('Data terbaru berhasil ditarik dari Google Sheet!', 'success');
         }
 
         async function forcePushToSheet() {
